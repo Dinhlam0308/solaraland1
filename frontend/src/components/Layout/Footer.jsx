@@ -1,40 +1,33 @@
-import React from "react";
+import "../../assets/css/Footer.css"
 
 const Footer = () => {
     return (
-        <footer className="bg-light text-dark pt-5 pb-4 mt-5">
+        <footer>
             <div className="container text-md-left">
                 <div className="row text-md-left">
                     {/* Về chúng tôi + logo */}
                     <div className="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <div className="d-flex align-items-center mb-3">
-                            <img
-                                src="/images/Logo.png"
-                                alt="Logo công ty"
-                                style={{ height: "40px", marginRight: "10px" }}
-                            />
-                            <h5 className="text-uppercase font-weight-bold mb-0">Về chúng tôi</h5>
+                            <img src="/images/Logo.png" alt="Logo công ty" />
+                            <h5 className="text-uppercase mb-0">Về chúng tôi</h5>
                         </div>
                         <p>
-                            Công ty chúng tôi chuyên cung cấp dịch vụ chất lượng cao, đặt uy tín
-                            và sự hài lòng của khách hàng lên hàng đầu.
+                            Công ty chúng tôi chuyên cung cấp dịch vụ chất lượng cao, đặt uy tín và sự hài lòng của khách hàng lên
+                            hàng đầu.
                         </p>
                     </div>
 
                     {/* Địa chỉ */}
                     <div className="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 className="text-uppercase mb-4 font-weight-bold">Địa chỉ</h5>
+                        <h5 className="text-uppercase mb-4">Địa chỉ</h5>
                         <p>123 Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh</p>
                     </div>
 
                     {/* Liên hệ */}
                     <div className="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 className="text-uppercase mb-4 font-weight-bold">Liên hệ</h5>
+                        <h5 className="text-uppercase mb-4">Liên hệ</h5>
                         <p>
-                            Nếu bạn có bất kỳ câu hỏi nào, vui lòng{" "}
-                            <a href="/lien-he" className="text-decoration-none text-primary">
-                                liên hệ với chúng tôi
-                            </a>.
+                            Nếu bạn có bất kỳ câu hỏi nào, vui lòng <a href="/lien-he">liên hệ với chúng tôi</a>.
                         </p>
                     </div>
                 </div>
@@ -43,14 +36,12 @@ const Footer = () => {
 
                 <div className="row align-items-center">
                     <div className="col-md-12 col-lg-12 text-center">
-                        <p className="text-muted mb-0">
-                            © 2025 Công ty của bạn. All rights reserved.
-                        </p>
+                        <p className="text-muted mb-0">© 2025 Công ty của bạn. All rights reserved.</p>
                     </div>
                 </div>
             </div>
         </footer>
-    );
-};
+    )
+}
 
-export default Footer;
+export default Footer

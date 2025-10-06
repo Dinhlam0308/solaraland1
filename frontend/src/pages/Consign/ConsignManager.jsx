@@ -1,42 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createConsign } from '../../api/consign';
-import axios from 'axios';
+"use client";
+
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { createConsign } from "../../api/consign";
+import axios from "axios";
+import "../../assets/css/Forms.css";
 
 const ConsignManager = () => {
     const [formData, setFormData] = useState({
-        name: '',
-        phone: '',
-        email: '',
-        project: '',
-        apartmentType: '',
-        bedrooms: '',
-        expectedPrice: '',
-        images: [], // URL ảnh Cloudinary
-        status: 'sale',
+        name: "",
+        phone: "",
+        email: "",
+        project: "",
+        apartmentType: "",
+        bedrooms: "",
+        expectedPrice: "",
+        images: [],
+        status: "sale",
     });
 
-    const [loading, setLoading] = useState(false); // khi submit form
-    const [uploading, setUploading] = useState(false); // khi upload ảnh
+    const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const navigate = useNavigate();
 
-    // 🔹 Tracking lượt truy cập trang này
     useEffect(() => {
-        // tạo visitorId duy nhất nếu chưa có
-        let visitorId = localStorage.getItem('visitorId');
+        let visitorId = localStorage.getItem("visitorId");
         if (!visitorId) {
             visitorId = crypto.randomUUID();
-            localStorage.setItem('visitorId', visitorId);
+            localStorage.setItem("visitorId", visitorId);
         }
 
-        axios.post('http://localhost:3001/api/stats/track-visit', {
-            page: window.location.pathname,
-            referrer: document.referrer,
-            visitorId
-        }).catch(err => console.error('Error tracking visit', err));
+        axios
+            .post("http://localhost:3001/api/stats/track-visit", {
+                page: window.location.pathname,
+                referrer: document.referrer,
+                visitorId,
+            })
+            .catch((err) => console.error("Error tracking visit", err));
     }, []);
 
-    // thay đổi input text/select
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -45,7 +47,6 @@ const ConsignManager = () => {
         }));
     };
 
-    // xoá ảnh đã upload
     const handleRemoveImage = (url) => {
         setFormData((prev) => ({
             ...prev,
@@ -53,7 +54,6 @@ const ConsignManager = () => {
         }));
     };
 
-    // upload nhiều ảnh song song lên Cloudinary
     const handleFileUpload = async (e) => {
         const files = Array.from(e.target.files);
         if (!files.length) return;
@@ -64,71 +64,66 @@ const ConsignManager = () => {
         }
 
         try {
-            setUploading(true); // bật spinner
+            setUploading(true);
 
-            // gọi server lấy signature
-            const sigRes = await axios.get('http://localhost:3001/api/cloudinary/signature');
+            // lấy chữ ký upload Cloudinary từ server
+            const sigRes = await axios.get("http://localhost:3001/api/cloudinary/signature");
             const { timestamp, signature, apiKey, cloudName, folder } = sigRes.data;
 
-            // upload song song lên Cloudinary
             const uploadPromises = files.map((file) => {
                 const fd = new FormData();
-                fd.append('file', file);
-                fd.append('api_key', apiKey);
-                fd.append('timestamp', timestamp);
-                fd.append('signature', signature);
-                fd.append('folder', folder);
+                fd.append("file", file);
+                fd.append("api_key", apiKey);
+                fd.append("timestamp", timestamp);
+                fd.append("signature", signature);
+                fd.append("folder", folder);
 
                 return axios.post(
                     `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
                     fd,
-                    { headers: { 'Content-Type': 'multipart/form-data' } }
+                    { headers: { "Content-Type": "multipart/form-data" } }
                 );
             });
 
             const results = await Promise.all(uploadPromises);
             const urls = results.map((r) => r.data.secure_url);
 
-            // lưu URL ảnh vào formData
             setFormData((prev) => ({
                 ...prev,
                 images: [...prev.images, ...urls],
             }));
         } catch (err) {
-            console.error('Error uploading file', err);
-            alert('Upload ảnh thất bại');
+            console.error("Error uploading file", err);
+            alert("Upload ảnh thất bại");
         } finally {
-            setUploading(false); // tắt spinner
+            setUploading(false);
         }
     };
 
-    // submit form
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (uploading) {
-            alert('Vui lòng đợi upload ảnh xong trước khi ký gửi');
+            alert("Vui lòng đợi upload ảnh xong trước khi ký gửi");
             return;
         }
         try {
             setLoading(true);
-            await createConsign(formData); // gửi JSON với images là URL Cloudinary
-            alert('Thêm consign thành công!');
-            navigate('/'); // chuyển trang nếu muốn
+            await createConsign(formData);
+            alert("Thêm consign thành công!");
+            navigate("/");
         } catch (err) {
-            console.error('Error creating consign', err);
-            alert('Có lỗi xảy ra khi thêm consign');
+            console.error("Error creating consign", err);
+            alert("Có lỗi xảy ra khi thêm consign");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="container mt-4">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2>Thêm Consign mới</h2>
-            </div>
+        <div className="form-container">
+            <h2 className="form-title">Thêm Consign mới</h2>
 
-            <form onSubmit={handleSubmit} className="mt-3">
+            <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label className="form-label">Tên</label>
                     <input
@@ -229,7 +224,6 @@ const ConsignManager = () => {
                     </div>
                 </div>
 
-                {/* Upload file ảnh */}
                 <div className="mb-3">
                     <label className="form-label">Tải tối đa 5 ảnh</label>
                     <input
@@ -240,50 +234,27 @@ const ConsignManager = () => {
                     />
                     {uploading && (
                         <div className="my-2 d-flex align-items-center">
-                            <div className="spinner-border text-primary" role="status">
+                            <div className="spinner-border" role="status">
                                 <span className="visually-hidden">Đang upload...</span>
                             </div>
                             <span className="ms-2">Đang upload ảnh...</span>
                         </div>
                     )}
-                    <small className="text-muted">
+                    <small className="upload-info">
                         Đã upload {formData.images.length}/5 ảnh
                     </small>
-                    <div className="mt-2 d-flex flex-wrap gap-2">
+                    <div className="image-preview-grid">
                         {formData.images.map((url, idx) => (
-                            <div
-                                key={idx}
-                                style={{
-                                    position: 'relative',
-                                    width: 100,
-                                    height: 100,
-                                }}
-                            >
+                            <div key={idx} className="image-preview-item">
                                 <img
-                                    src={url}
+                                    src={url || "/placeholder.svg"}
                                     alt="uploaded"
-                                    width={100}
-                                    height={100}
-                                    className="img-thumbnail"
-                                    style={{ objectFit: 'cover' }}
+                                    className="image-preview-thumbnail"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => handleRemoveImage(url)}
-                                    style={{
-                                        position: 'absolute',
-                                        top: 2,
-                                        right: 2,
-                                        background: 'red',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '50%',
-                                        width: '20px',
-                                        height: '20px',
-                                        lineHeight: '18px',
-                                        padding: 0,
-                                        cursor: 'pointer',
-                                    }}
+                                    className="image-remove-button"
                                 >
                                     ×
                                 </button>
@@ -292,18 +263,17 @@ const ConsignManager = () => {
                     </div>
                 </div>
 
-                {/* Nút Ký gửi */}
                 <div className="mt-4 text-center">
                     <button
                         type="submit"
-                        className="btn btn-primary"
+                        className="btn-primary"
                         disabled={loading || uploading}
                     >
                         {loading
-                            ? 'Đang lưu...'
+                            ? "Đang lưu..."
                             : uploading
-                                ? 'Đang upload ảnh...'
-                                : 'Ký gửi'}
+                                ? "Đang upload ảnh..."
+                                : "Ký gửi"}
                     </button>
                 </div>
             </form>

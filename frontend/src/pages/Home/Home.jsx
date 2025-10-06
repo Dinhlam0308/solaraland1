@@ -72,39 +72,42 @@ const HomePage = () => {
 
     return (
         <>
-        {/* Banner */}
-        <div className="banner">
-            <video autoPlay muted loop playsInline>
-                <source src={bannerVideo} type="video/mp4"/>
-                Trình duyệt của bạn không hỗ trợ video.
-            </video>
-            <div className="overlay"></div>
-            <div className="banner-content">
-                <h1>Solaraland</h1>
-                <p>Bất động sản xanh, sinh lời bền vững</p>
+            {/* Banner */}
+            <div className="banner">
+                <video autoPlay muted loop playsInline>
+                    <source src={bannerVideo} type="video/mp4"/>
+                    Trình duyệt của bạn không hỗ trợ video.
+                </video>
+                <div className="overlay"></div>
+                <div className="banner-content">
+                    <h1>Solaraland</h1>
+                    <p>Bất động sản xanh, sinh lời bền vững</p>
+                </div>
             </div>
-        </div>
 
-        {/* DỰ ÁN */}
-        <div className="du-an-dang-ban">
-            {projects.map((project) => (
-                <Link to={`/trang-chu/${project.slug}`} key={project.slug}>
-                    <div className="project-card">
-                        <img src={project.img} alt={project.alt} title={project.alt}/>
-                        <div className="project-name">{project.name}</div>
-                    </div>
-                </Link>
-            ))}
-        </div>
+            {/* DỰ ÁN */}
+            <div className="selection-title">
+            <h2>DỰ ÁN ĐANG BÁN</h2>
+            </div>
+            <div className="du-an-dang-ban">
+                {projects.map((project) => (
+                    <Link to={`/trang-chu/${project.slug}`} key={project.slug}>
+                        <div className="project-card">
+                            <img src={project.img} alt={project.alt} title={project.alt}/>
+                            <div className="project-name">{project.name}</div>
+                        </div>
+                    </Link>
+                ))}
+            </div>
 
-    {/* CĂN HỘ */
-    }
-    <div className="selection-title">
-        <h2>CĂN HỘ CHO THUÊ</h2>
-        <div className="rent-slider-container">
-            <Slider {...sliderSettings}>
-                {rentProducts.map((item) => (
-                    <div key={item._id} className="slide-wrapper">
+            {/* CĂN HỘ */
+            }
+            <div className="selection-title">
+                <h2>CĂN HỘ CHO THUÊ</h2>
+                <div className="rent-slider-container">
+                    <Slider {...sliderSettings}>
+                        {rentProducts.map((item) => (
+                            <div key={item._id} className="slide-wrapper">
                                 <div className="rent-card">
                                     <div
                                         className="rent-img-wrapper"
@@ -113,9 +116,9 @@ const HomePage = () => {
                                             setActiveImage(item.mainImage);
                                         }}
                                     >
-                                        <img src={item.mainImage} alt={item.name} className="rent-img" />
+                                        <img src={item.mainImage} alt={item.name} className="rent-img"/>
                                         <div className="rent-overlay">
-                                            <FaHome size={28} style={{ marginBottom: "6px" }} />
+                                            <FaHome size={28} style={{marginBottom: "6px"}}/>
                                             <span>Quick View</span>
                                         </div>
                                     </div>
@@ -141,7 +144,7 @@ const HomePage = () => {
                 <div className="quickview-modal">
                     <div className="quickview-content">
                         <button className="quickview-close" onClick={() => setSelectedProduct(null)}>
-                            <FaTimes />
+                            <FaTimes/>
                         </button>
                         <div className="quickview-left">
                             <div className="quickview-image-container">
@@ -183,9 +186,9 @@ const HomePage = () => {
             {zoomImage && (
                 <div className="zoom-modal" onClick={() => setZoomImage(null)}>
                     <button className="zoom-close" onClick={() => setZoomImage(null)}>
-                        <FaTimes />
+                        <FaTimes/>
                     </button>
-                    <img src={zoomImage} alt="Zoom" className="zoomed-image" />
+                    <img src={zoomImage} alt="Zoom" className="zoomed-image"/>
                 </div>
             )}
         </>

@@ -1,61 +1,63 @@
+"use client"
+
 // src/pages/NhaPhoPage.jsx
-import { useEffect, useState } from 'react';
-import { getProductsByType, advancedFilterProducts } from '../../api/product';
-import { useNavigate } from 'react-router-dom';
-import '../../assets/css/CanHoPage.css';
+import { useEffect, useState } from "react"
+import { getProductsByType, advancedFilterProducts } from "../../api/product"
+import { useNavigate } from "react-router-dom"
+import "../../assets/css/CanHoPage.css"
 
 export default function NhaPhoPage() {
-    const [products, setProducts] = useState([]);
-    const [selectedBedrooms, setSelectedBedrooms] = useState([]);
-    const [status, setStatus] = useState('sale');
-    const [priceRange, setPriceRange] = useState('');
-    const navigate = useNavigate();
+    const [products, setProducts] = useState([])
+    const [selectedBedrooms, setSelectedBedrooms] = useState([])
+    const [status, setStatus] = useState("sale")
+    const [priceRange, setPriceRange] = useState("")
+    const navigate = useNavigate()
 
     useEffect(() => {
         // gọi dữ liệu nhà phố
-        getProductsByType('nha-pho').then(data => setProducts(data));
-    }, []);
+        getProductsByType("nha-pho").then((data) => setProducts(data))
+    }, [])
 
     const handleCheckboxChange = (value) => {
         if (selectedBedrooms.includes(value)) {
-            setSelectedBedrooms(selectedBedrooms.filter(v => v !== value));
+            setSelectedBedrooms(selectedBedrooms.filter((v) => v !== value))
         } else {
-            setSelectedBedrooms([...selectedBedrooms, value]);
+            setSelectedBedrooms([...selectedBedrooms, value])
         }
-    };
+    }
 
     const handleFilter = () => {
-        let min = '';
-        let max = '';
+        let min = ""
+        let max = ""
 
-        if (status === 'sale') {
-            if (priceRange === 'under2') {
-                max = 2000000000;
-            } else if (priceRange === 'under7') {
-                max = 7000000000;
-            } else if (priceRange === 'over7') {
-                min = 7000000000;
+        if (status === "sale") {
+            if (priceRange === "under2") {
+                max = 2000000000
+            } else if (priceRange === "under7") {
+                max = 7000000000
+            } else if (priceRange === "over7") {
+                min = 7000000000
             }
         } else {
-            if (priceRange === 'under10m') {
-                max = 10000000;
-            } else if (priceRange === 'under20m') {
-                max = 20000000;
-            } else if (priceRange === 'over20m') {
-                min = 20000000;
+            if (priceRange === "under10m") {
+                max = 10000000
+            } else if (priceRange === "under20m") {
+                max = 20000000
+            } else if (priceRange === "over20m") {
+                min = 20000000
             }
         }
 
         const params = {
-            type: 'nha-pho',
+            type: "nha-pho",
             status,
-            bedrooms: selectedBedrooms.join(','),
-        };
-        if (min) params.priceMin = min;
-        if (max) params.priceMax = max;
+            bedrooms: selectedBedrooms.join(","),
+        }
+        if (min) params.priceMin = min
+        if (max) params.priceMax = max
 
-        advancedFilterProducts(params).then(data => setProducts(data));
-    };
+        advancedFilterProducts(params).then((data) => setProducts(data))
+    }
 
     return (
         <div className="container-fluid p-4">
@@ -77,13 +79,15 @@ export default function NhaPhoPage() {
                                     name="status"
                                     id="statusSale"
                                     value="sale"
-                                    checked={status === 'sale'}
-                                    onChange={e => {
-                                        setStatus(e.target.value);
-                                        setPriceRange('');
+                                    checked={status === "sale"}
+                                    onChange={(e) => {
+                                        setStatus(e.target.value)
+                                        setPriceRange("")
                                     }}
                                 />
-                                <label className="form-check-label" htmlFor="statusSale">Mua</label>
+                                <label className="form-check-label" htmlFor="statusSale">
+                                    Mua
+                                </label>
                             </div>
                             <div className="form-check form-check-inline">
                                 <input
@@ -92,20 +96,22 @@ export default function NhaPhoPage() {
                                     name="status"
                                     id="statusRent"
                                     value="rent"
-                                    checked={status === 'rent'}
-                                    onChange={e => {
-                                        setStatus(e.target.value);
-                                        setPriceRange('');
+                                    checked={status === "rent"}
+                                    onChange={(e) => {
+                                        setStatus(e.target.value)
+                                        setPriceRange("")
                                     }}
                                 />
-                                <label className="form-check-label" htmlFor="statusRent">Thuê</label>
+                                <label className="form-check-label" htmlFor="statusRent">
+                                    Thuê
+                                </label>
                             </div>
                         </div>
 
                         {/* Giá */}
                         <div className="mb-3">
                             <label className="form-label d-block">Giá</label>
-                            {status === 'sale' ? (
+                            {status === "sale" ? (
                                 <>
                                     <div className="form-check">
                                         <input
@@ -114,10 +120,12 @@ export default function NhaPhoPage() {
                                             name="priceRange"
                                             id="under2"
                                             value="under2"
-                                            checked={priceRange === 'under2'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under2"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under2">Dưới 2 tỷ</label>
+                                        <label className="form-check-label" htmlFor="under2">
+                                            Dưới 2 tỷ
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -126,10 +134,12 @@ export default function NhaPhoPage() {
                                             name="priceRange"
                                             id="under7"
                                             value="under7"
-                                            checked={priceRange === 'under7'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under7"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under7">Dưới 7 tỷ</label>
+                                        <label className="form-check-label" htmlFor="under7">
+                                            Dưới 7 tỷ
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -138,10 +148,12 @@ export default function NhaPhoPage() {
                                             name="priceRange"
                                             id="over7"
                                             value="over7"
-                                            checked={priceRange === 'over7'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "over7"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="over7">Trên 7 tỷ</label>
+                                        <label className="form-check-label" htmlFor="over7">
+                                            Trên 7 tỷ
+                                        </label>
                                     </div>
                                 </>
                             ) : (
@@ -153,10 +165,12 @@ export default function NhaPhoPage() {
                                             name="priceRange"
                                             id="under10m"
                                             value="under10m"
-                                            checked={priceRange === 'under10m'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under10m"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under10m">Dưới 10 triệu</label>
+                                        <label className="form-check-label" htmlFor="under10m">
+                                            Dưới 10 triệu
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -165,10 +179,12 @@ export default function NhaPhoPage() {
                                             name="priceRange"
                                             id="under20m"
                                             value="under20m"
-                                            checked={priceRange === 'under20m'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under20m"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under20m">Dưới 20 triệu</label>
+                                        <label className="form-check-label" htmlFor="under20m">
+                                            Dưới 20 triệu
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -177,10 +193,12 @@ export default function NhaPhoPage() {
                                             name="priceRange"
                                             id="over20m"
                                             value="over20m"
-                                            checked={priceRange === 'over20m'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "over20m"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="over20m">Trên 20 triệu</label>
+                                        <label className="form-check-label" htmlFor="over20m">
+                                            Trên 20 triệu
+                                        </label>
                                     </div>
                                 </>
                             )}
@@ -189,7 +207,7 @@ export default function NhaPhoPage() {
                         {/* Phòng ngủ */}
                         <div className="mb-3">
                             <label className="form-label d-block">Phòng ngủ</label>
-                            {[1,2,3].map(n => (
+                            {[1, 2, 3].map((n) => (
                                 <div className="form-check" key={n}>
                                     <input
                                         className="form-check-input"
@@ -198,7 +216,9 @@ export default function NhaPhoPage() {
                                         onChange={() => handleCheckboxChange(n)}
                                         checked={selectedBedrooms.includes(n)}
                                     />
-                                    <label className="form-check-label" htmlFor={`bed${n}`}>{n}</label>
+                                    <label className="form-check-label" htmlFor={`bed${n}`}>
+                                        {n}
+                                    </label>
                                 </div>
                             ))}
                             <div className="form-check">
@@ -209,29 +229,29 @@ export default function NhaPhoPage() {
                                     onChange={() => handleCheckboxChange(0)}
                                     checked={selectedBedrooms.includes(0)}
                                 />
-                                <label className="form-check-label" htmlFor="bedOther">Khác</label>
+                                <label className="form-check-label" htmlFor="bedOther">
+                                    Khác
+                                </label>
                             </div>
                         </div>
 
-                        <button className="btn btn-primary w-100" onClick={handleFilter}>Lọc</button>
+                        <button className="btn btn-primary w-100" onClick={handleFilter}>
+                            Lọc
+                        </button>
                     </div>
                 </div>
 
                 {/* Danh sách sản phẩm bên phải */}
                 <div className="col-md-9">
                     <div className="d-flex flex-wrap justify-content-start gap-4">
-                        {products.map(product => (
+                        {products.map((product) => (
                             <div
                                 className="card-apartment"
                                 key={product._id}
                                 onClick={() => navigate(`/san-pham/${product.name}`)}
-
-                                style={{ cursor: 'pointer' }}
+                                style={{ cursor: "pointer" }}
                             >
-                                <img
-                                    src={product.mainImage || '/placeholder.jpg'}
-                                    alt={product.name}
-                                />
+                                <img src={product.mainImage || "/placeholder.jpg"} alt={product.name} />
                                 <div className="overlay">
                                     <i className="bi bi-building"></i> {/* icon đổi sang building */}
                                 </div>
@@ -243,7 +263,7 @@ export default function NhaPhoPage() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-success btn-sm"
-                                        onClick={e => e.stopPropagation()}
+                                        onClick={(e) => e.stopPropagation()}
                                     >
                                         Liên hệ Zalo
                                     </a>
@@ -254,5 +274,5 @@ export default function NhaPhoPage() {
                 </div>
             </div>
         </div>
-    );
+    )
 }

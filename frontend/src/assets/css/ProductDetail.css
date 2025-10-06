@@ -1,0 +1,213 @@
+/* Product Details Page Professional Styling */
+
+/* Container Styling */
+.my-5 {
+    padding: 3rem 1rem;
+}
+
+/* Main Image Container */
+.position-relative {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(26, 35, 50, 0.15);
+    margin-bottom: 1.5rem;
+}
+
+.position-relative img.img-fluid {
+    border-radius: 16px;
+    transition: transform 0.3s ease;
+}
+
+/* Navigation Buttons */
+.position-absolute.btn {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid #c9a961;
+    color: #1a2332;
+    font-weight: 700;
+    font-size: 1.5rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    opacity: 0.9 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(26, 35, 50, 0.2);
+}
+
+.position-absolute.btn:hover {
+    opacity: 1 !important;
+    background: #c9a961 !important;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.4);
+}
+
+/* Thumbnails */
+.rounded.shadow-sm {
+    border: 3px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(26, 35, 50, 0.1) !important;
+}
+
+.rounded.shadow-sm:hover {
+    border-color: #c9a961;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 16px rgba(201, 169, 97, 0.3) !important;
+}
+
+.border-primary {
+    border-color: #c9a961 !important;
+    border-width: 3px !important;
+    box-shadow: 0 4px 16px rgba(201, 169, 97, 0.4) !important;
+}
+
+/* Product Information */
+h1.mb-3 {
+    color: #1a2332;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.3;
+}
+
+.text-muted {
+    color: #4a5568 !important;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.text-primary {
+    color: #c9a961 !important;
+    font-weight: 700;
+    font-size: 1.75rem !important;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.3px;
+}
+
+/* Zalo Contact Button */
+.btn-success.btn-lg {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-success.btn-lg:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+}
+
+/* Project Information Section */
+.mt-5 {
+    margin-top: 4rem !important;
+    padding-top: 3rem;
+    border-top: 2px solid #e2e8f0;
+}
+
+.mt-5 h2 {
+    color: #1a2332;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 2rem !important;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.mt-5 h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, #c9a961 0%, #10b981 100%);
+    border-radius: 2px;
+}
+
+.mt-5 h4 {
+    color: #2d3748;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+/* Project Description */
+.mx-auto {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(26, 35, 50, 0.08);
+    line-height: 1.8;
+    color: #4a5568;
+}
+
+/* Project Thumbnail */
+.mt-5 img.img-fluid {
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(26, 35, 50, 0.15);
+    transition: transform 0.3s ease;
+    margin-top: 2rem !important;
+}
+
+.mt-5 img.img-fluid:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 32px rgba(26, 35, 50, 0.2);
+}
+
+/* Loading State */
+.text-center.my-5 {
+    color: #1a2332;
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 3rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1.mb-3 {
+        font-size: 1.75rem;
+    }
+
+    .text-primary {
+        font-size: 1.5rem !important;
+    }
+
+    .btn-success.btn-lg {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+    }
+
+    .mx-auto {
+        padding: 1.5rem;
+    }
+
+    .position-absolute.btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .rounded.shadow-sm {
+        height: 60px !important;
+        width: 60px !important;
+    }
+
+    .mt-5 h2::after {
+        width: 80px;
+    }
+}

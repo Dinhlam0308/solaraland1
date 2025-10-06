@@ -195,9 +195,10 @@ exports.getProductsByType = async (req, res) => {
 
 
 // Lọc nâng cao theo nhiều điều kiện
+// controllers/productController.js
 exports.advancedFilterProducts = async (req, res) => {
     try {
-        const { priceMin, priceMax, bedrooms, type, status } = req.query;
+        const { priceMin, priceMax, bedrooms, type, status, projectId } = req.query;
         const query = {};
 
         if (status) {
@@ -205,11 +206,15 @@ exports.advancedFilterProducts = async (req, res) => {
         }
 
         if (type) {
-            query.type = { $in: type.split(',') }; // 'can-ho', 'nha-pho', 'office-tel'
+            query.type = { $in: type.split(',') };
         }
 
         if (bedrooms) {
-            query.bedrooms = { $in: bedrooms.split(',').map(Number) }; // 1,2,3,...
+            query.bedrooms = { $in: bedrooms.split(',').map(Number) };
+        }
+
+        if (projectId) {
+            query.project = projectId; // 👈 lọc theo dự án
         }
 
         if (priceMin || priceMax) {
@@ -224,6 +229,7 @@ exports.advancedFilterProducts = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
 exports.getProductByName = async (req, res) => {
     try {
         const { name } = req.params;

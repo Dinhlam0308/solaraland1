@@ -234,14 +234,7 @@ export default function ZeitgeistPage() {
                             <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
                                 Trang chủ
                             </Link>{" "}
-                            &gt;{" "}
-                            <Link
-                                to="/san-pham"
-                                style={{ color: "#646cff", textDecoration: "none" }}
-                            >
-                                Sản phẩm
-                            </Link>{" "}
-                            &gt; <span>eitgeist</span>
+                            &gt; <span>Zeitgeist</span>
                         </nav>
 
                         {/* Grid sản phẩm */}

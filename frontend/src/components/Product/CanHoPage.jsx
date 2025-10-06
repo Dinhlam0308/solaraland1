@@ -1,61 +1,73 @@
-import { useEffect, useState } from 'react';
-import { getProductsByType, advancedFilterProducts } from '../../api/product';
-import { useNavigate } from 'react-router-dom';
-import '../../assets/css/CanHoPage.css';
+"use client";
+
+import { useEffect, useState } from "react";
+import { getProductsByType, advancedFilterProducts } from "../../api/product";
+import { getProjects } from "../../api/project";
+import { useNavigate } from "react-router-dom";
+import "../../assets/css/CanHoPage.css";
 
 export default function CanHoPage() {
     const [products, setProducts] = useState([]);
     const [selectedBedrooms, setSelectedBedrooms] = useState([]);
-    const [status, setStatus] = useState('sale'); // mặc định mua
-    const [priceRange, setPriceRange] = useState(''); // under2, under7, over7 OR under10m, under20m, over20m
+    const [status, setStatus] = useState("sale"); // mặc định mua
+    const [priceRange, setPriceRange] = useState(""); // under2, under7...
+
+    const [projectsList, setProjectsList] = useState([]); // danh sách dự án
+    const [selectedProject, setSelectedProject] = useState(""); // dự án đang chọn
+
     const navigate = useNavigate();
 
+    // load danh sách dự án + sản phẩm mặc định
     useEffect(() => {
-        getProductsByType('can-ho').then(data => setProducts(data));
+        getProjects().then((data) => {
+            // ép về mảng an toàn
+            const arr = Array.isArray(data) ? data : data.projects || [];
+            setProjectsList(arr);
+        });
+
+        getProductsByType("can-ho").then((data) => setProducts(data));
     }, []);
 
     const handleCheckboxChange = (value) => {
         if (selectedBedrooms.includes(value)) {
-            setSelectedBedrooms(selectedBedrooms.filter(v => v !== value));
+            setSelectedBedrooms(selectedBedrooms.filter((v) => v !== value));
         } else {
             setSelectedBedrooms([...selectedBedrooms, value]);
         }
     };
 
     const handleFilter = () => {
-        // chuyển radio giá sang min/max
-        let min = '';
-        let max = '';
+        let min = "";
+        let max = "";
 
-        if (status === 'sale') {
-            // mua
-            if (priceRange === 'under2') {
+        if (status === "sale") {
+            if (priceRange === "under2") {
                 max = 2000000000; // 2 tỷ
-            } else if (priceRange === 'under7') {
+            } else if (priceRange === "under7") {
                 max = 7000000000; // 7 tỷ
-            } else if (priceRange === 'over7') {
+            } else if (priceRange === "over7") {
                 min = 7000000000; // trên 7 tỷ
             }
         } else {
-            // thuê
-            if (priceRange === 'under10m') {
+            if (priceRange === "under10m") {
                 max = 10000000; // 10 triệu
-            } else if (priceRange === 'under20m') {
+            } else if (priceRange === "under20m") {
                 max = 20000000; // 20 triệu
-            } else if (priceRange === 'over20m') {
+            } else if (priceRange === "over20m") {
                 min = 20000000; // trên 20 triệu
             }
         }
 
         const params = {
-            type: 'can-ho',
+            type: "can-ho",
             status,
-            bedrooms: selectedBedrooms.join(','),
+            bedrooms: selectedBedrooms.join(","), // 1,2,3
         };
         if (min) params.priceMin = min;
         if (max) params.priceMax = max;
+        if (selectedProject) params.projectId = selectedProject; // lọc theo dự án
 
-        advancedFilterProducts(params).then(data => setProducts(data));
+        advancedFilterProducts(params).then((data) => setProducts(data));
     };
 
     return (
@@ -68,6 +80,23 @@ export default function CanHoPage() {
                     <div className="bg-light p-3 rounded sticky-top">
                         <h5 className="fw-bold mb-3">Bộ lọc</h5>
 
+                        {/* Chọn dự án */}
+                        <div className="mb-3">
+                            <label className="form-label d-block">Dự án</label>
+                            <select
+                                className="form-select"
+                                value={selectedProject}
+                                onChange={(e) => setSelectedProject(e.target.value)}
+                            >
+                                <option value="">Tất cả</option>
+                                {projectsList.map((proj) => (
+                                    <option key={proj._id} value={proj._id}>
+                                        {proj.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
                         {/* Trạng thái */}
                         <div className="mb-3">
                             <label className="form-label d-block">Trạng thái</label>
@@ -78,13 +107,15 @@ export default function CanHoPage() {
                                     name="status"
                                     id="statusSale"
                                     value="sale"
-                                    checked={status === 'sale'}
-                                    onChange={e => {
+                                    checked={status === "sale"}
+                                    onChange={(e) => {
                                         setStatus(e.target.value);
-                                        setPriceRange('');
+                                        setPriceRange("");
                                     }}
                                 />
-                                <label className="form-check-label" htmlFor="statusSale">Mua</label>
+                                <label className="form-check-label" htmlFor="statusSale">
+                                    Mua
+                                </label>
                             </div>
                             <div className="form-check form-check-inline">
                                 <input
@@ -93,20 +124,22 @@ export default function CanHoPage() {
                                     name="status"
                                     id="statusRent"
                                     value="rent"
-                                    checked={status === 'rent'}
-                                    onChange={e => {
+                                    checked={status === "rent"}
+                                    onChange={(e) => {
                                         setStatus(e.target.value);
-                                        setPriceRange('');
+                                        setPriceRange("");
                                     }}
                                 />
-                                <label className="form-check-label" htmlFor="statusRent">Thuê</label>
+                                <label className="form-check-label" htmlFor="statusRent">
+                                    Thuê
+                                </label>
                             </div>
                         </div>
 
                         {/* Giá */}
                         <div className="mb-3">
                             <label className="form-label d-block">Giá</label>
-                            {status === 'sale' ? (
+                            {status === "sale" ? (
                                 <>
                                     <div className="form-check">
                                         <input
@@ -115,10 +148,12 @@ export default function CanHoPage() {
                                             name="priceRange"
                                             id="under2"
                                             value="under2"
-                                            checked={priceRange === 'under2'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under2"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under2">Dưới 2 tỷ</label>
+                                        <label className="form-check-label" htmlFor="under2">
+                                            Dưới 2 tỷ
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -127,10 +162,12 @@ export default function CanHoPage() {
                                             name="priceRange"
                                             id="under7"
                                             value="under7"
-                                            checked={priceRange === 'under7'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under7"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under7">Dưới 7 tỷ</label>
+                                        <label className="form-check-label" htmlFor="under7">
+                                            Dưới 7 tỷ
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -139,10 +176,12 @@ export default function CanHoPage() {
                                             name="priceRange"
                                             id="over7"
                                             value="over7"
-                                            checked={priceRange === 'over7'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "over7"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="over7">Trên 7 tỷ</label>
+                                        <label className="form-check-label" htmlFor="over7">
+                                            Trên 7 tỷ
+                                        </label>
                                     </div>
                                 </>
                             ) : (
@@ -154,10 +193,12 @@ export default function CanHoPage() {
                                             name="priceRange"
                                             id="under10m"
                                             value="under10m"
-                                            checked={priceRange === 'under10m'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under10m"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under10m">Dưới 10 triệu</label>
+                                        <label className="form-check-label" htmlFor="under10m">
+                                            Dưới 10 triệu
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -166,10 +207,12 @@ export default function CanHoPage() {
                                             name="priceRange"
                                             id="under20m"
                                             value="under20m"
-                                            checked={priceRange === 'under20m'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "under20m"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="under20m">Dưới 20 triệu</label>
+                                        <label className="form-check-label" htmlFor="under20m">
+                                            Dưới 20 triệu
+                                        </label>
                                     </div>
                                     <div className="form-check">
                                         <input
@@ -178,10 +221,12 @@ export default function CanHoPage() {
                                             name="priceRange"
                                             id="over20m"
                                             value="over20m"
-                                            checked={priceRange === 'over20m'}
-                                            onChange={e => setPriceRange(e.target.value)}
+                                            checked={priceRange === "over20m"}
+                                            onChange={(e) => setPriceRange(e.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor="over20m">Trên 20 triệu</label>
+                                        <label className="form-check-label" htmlFor="over20m">
+                                            Trên 20 triệu
+                                        </label>
                                     </div>
                                 </>
                             )}
@@ -190,7 +235,7 @@ export default function CanHoPage() {
                         {/* Phòng ngủ */}
                         <div className="mb-3">
                             <label className="form-label d-block">Phòng ngủ</label>
-                            {[1,2,3].map(n => (
+                            {[1, 2, 3].map((n) => (
                                 <div className="form-check" key={n}>
                                     <input
                                         className="form-check-input"
@@ -199,7 +244,9 @@ export default function CanHoPage() {
                                         onChange={() => handleCheckboxChange(n)}
                                         checked={selectedBedrooms.includes(n)}
                                     />
-                                    <label className="form-check-label" htmlFor={`bed${n}`}>{n}</label>
+                                    <label className="form-check-label" htmlFor={`bed${n}`}>
+                                        {n}
+                                    </label>
                                 </div>
                             ))}
                             <div className="form-check">
@@ -210,26 +257,30 @@ export default function CanHoPage() {
                                     onChange={() => handleCheckboxChange(0)}
                                     checked={selectedBedrooms.includes(0)}
                                 />
-                                <label className="form-check-label" htmlFor="bedOther">Khác</label>
+                                <label className="form-check-label" htmlFor="bedOther">
+                                    Khác
+                                </label>
                             </div>
                         </div>
 
-                        <button className="btn btn-primary w-100" onClick={handleFilter}>Lọc</button>
+                        <button className="btn btn-primary w-100" onClick={handleFilter}>
+                            Lọc
+                        </button>
                     </div>
                 </div>
 
                 {/* Danh sách sản phẩm bên phải */}
                 <div className="col-md-9">
                     <div className="d-flex flex-wrap justify-content-start gap-4">
-                        {products.map(product => (
+                        {products.map((product) => (
                             <div
                                 className="card-apartment"
                                 key={product._id}
                                 onClick={() => navigate(`/san-pham/${product.name}`)}
-                                style={{ cursor: 'pointer' }}
+                                style={{ cursor: "pointer" }}
                             >
                                 <img
-                                    src={product.mainImage || '/placeholder.jpg'}
+                                    src={product.mainImage || "/placeholder.jpg"}
                                     alt={product.name}
                                 />
                                 <div className="overlay">
@@ -237,13 +288,15 @@ export default function CanHoPage() {
                                 </div>
                                 <div className="info">
                                     <h6 className="mb-1">{product.name}</h6>
-                                    <p className="mb-1 small">{product.price.toLocaleString()} đ</p>
+                                    <p className="mb-1 small">
+                                        {Number(product.price).toLocaleString()} đ
+                                    </p>
                                     <a
                                         href={`https://zalo.me/0123456789`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-success btn-sm"
-                                        onClick={e => e.stopPropagation()}
+                                        onClick={(e) => e.stopPropagation()}
                                     >
                                         Liên hệ Zalo
                                     </a>

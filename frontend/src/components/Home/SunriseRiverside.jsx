@@ -234,13 +234,6 @@ export default function SunriseRiversidePage() {
                             <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
                                 Trang chủ
                             </Link>{" "}
-                            &gt;{" "}
-                            <Link
-                                to="/san-pham"
-                                style={{ color: "#646cff", textDecoration: "none" }}
-                            >
-                                Sản phẩm
-                            </Link>{" "}
                             &gt; <span>Sunrise Riverside</span>
                         </nav>
 

@@ -1,0 +1,147 @@
+/* ===== FOOTER STYLES ===== */
+
+footer {
+    background: linear-gradient(135deg, #1a2332 0%, #2c3e50 100%);
+    color: #e5e7eb;
+    padding: 4rem 0 2rem;
+    margin-top: 5rem;
+    border-top: 3px solid #c9a961;
+}
+
+footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Logo and title section */
+footer .d-flex.align-items-center {
+    margin-bottom: 1.5rem;
+}
+
+footer img {
+    height: 50px !important;
+    margin-right: 15px !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+footer h5 {
+    color: #c9a961;
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 0 !important;
+    text-transform: uppercase;
+}
+
+/* Content text */
+footer p {
+    color: #333333;
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+/* Section titles */
+footer .col-md-4 h5 {
+    color: #c9a961;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+footer .col-md-4 h5::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(90deg, #c9a961 0%, #10b981 100%);
+}
+
+/* Links */
+footer a {
+    color: #10b981;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+footer a:hover {
+    color: #c9a961;
+    text-decoration: none;
+}
+
+footer a::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #c9a961;
+    transition: width 0.3s ease;
+}
+
+footer a:hover::after {
+    width: 100%;
+}
+
+/* Divider */
+footer hr {
+    border-color: rgba(201, 169, 97, 0.3);
+    margin: 2.5rem 0 1.5rem;
+}
+
+/* Copyright text */
+footer .text-muted {
+    color: #9ca3af !important;
+    font-size: 0.875rem;
+    margin-bottom: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    footer {
+        padding: 3rem 0 1.5rem;
+    }
+
+    footer .container {
+        padding: 0 1.5rem;
+    }
+
+    footer .col-md-4 {
+        margin-bottom: 2rem;
+    }
+
+    footer h5 {
+        font-size: 1.1rem;
+    }
+
+    footer img {
+        height: 40px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    footer {
+        padding: 2rem 0 1rem;
+    }
+
+    footer .container {
+        padding: 0 1rem;
+    }
+
+    footer h5 {
+        font-size: 1rem;
+    }
+
+    footer p {
+        font-size: 0.875rem;
+    }
+}
