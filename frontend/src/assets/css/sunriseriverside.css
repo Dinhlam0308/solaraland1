@@ -1,0 +1,123 @@
+.sunrise-page {
+    padding-top: 20px; /* chỉ trang này có padding-top */
+
+}
+
+.sunrise-container {
+    width: 100%;
+    max-width: 1120px; /* tương đương max-w-7xl */
+    padding: 0 2rem;   /* tăng padding hai bên */
+    margin: 0 auto;
+    margin-top: 12px;
+}
+
+.sunrise-title {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center; /* căn giữa tiêu đề */
+}
+
+/* Grid sản phẩm căn giữa */
+.sunrise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 cột */
+    gap: 1.5rem; /* khoảng cách giữa các card */
+    width: 100%;
+}
+
+/* Card */
+.sunrise-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.sunrise-card:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+/* Ảnh */
+.sunrise-image-wrapper {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9fafb;
+    overflow: hidden;
+}
+
+.sunrise-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Phần text căn giữa bên trong card */
+.sunrise-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* chữ căn ngang giữa */
+    padding: 0.75rem;
+    text-align: center;  /* chữ căn giữa */
+}
+
+.sunrise-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sunrise-price {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-top: 0.25rem;
+}
+/* vuông radio & checkbox */
+aside input[type="checkbox"],
+aside input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 2px; /* vuông */
+    background-color: #fff;
+    margin-right: 6px;
+    cursor: pointer;
+    position: relative;
+}
+
+aside input[type="checkbox"]:checked,
+aside input[type="radio"]:checked {
+    background-color: #646cff; /* màu tick */
+    border-color: #646cff;
+}
+
+aside input[type="checkbox"]:checked::after,
+aside input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+aside {
+    margin-left: 20px;
+    margin-right: -70px;
+}

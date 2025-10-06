@@ -1,0 +1,392 @@
+.banner {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+}
+.banner video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+.banner .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+.banner-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    text-align: center;
+    z-index: 2;
+}
+.banner-content h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+}
+.banner-content p {
+    font-size: 1.8rem;
+    line-height: 1.6;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+.selection-title h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin: 30px 0;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #333;
+}
+
+.du-an-dang-ban {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: 215px;
+    margin-top: 30px;
+}
+
+.project-card {
+    position: relative;
+    width: 400px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.project-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+.project-card:hover img {
+    filter: brightness(1);
+    transform: scale(1.05);
+}
+.project-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    transition: background 0.3s ease;
+}
+.project-card:hover .project-name {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Căn hộ cho thuê */
+.rent-slider-container {
+    max-width: 1200px;
+    margin: 80px auto; /* cách trên dưới dài hơn */
+    padding: 0 30px;
+    position: relative;
+}
+.rent-slider-container .slick-slide {
+    padding: 10px;
+}
+.slide-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.rent-card {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: auto;
+}
+.rent-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.rent-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+.rent-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+.rent-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.rent-overlay i {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+.rent-overlay span {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+.rent-img-wrapper:hover .rent-overlay {
+    opacity: 1;
+}
+.rent-img-wrapper:hover .rent-img {
+    filter: brightness(0.6);
+    transform: scale(1.05);
+}
+
+.rent-info {
+    padding: 12px;
+    text-align: center;
+}
+.rent-info h3 {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 600;
+    color: #333;
+}
+.rent-price {
+    font-size: 0.9rem;
+    color: #ff6600;
+    margin: 4px 0 8px;
+}
+.contact-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+}
+.contact-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* mũi tên */
+.custom-prev,
+.custom-next {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: none;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 22px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 5;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.custom-prev:hover,
+.custom-next:hover {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+.custom-prev {
+    left: -15px;
+}
+.custom-next {
+    right: -15px;
+}
+.rent-slider-container:hover .custom-prev,
+.rent-slider-container:hover .custom-next {
+    opacity: 1;
+}
+/* overlay quickview khi hover */
+.rent-img-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+.rent-img-wrapper .rent-img {
+    display: block;
+}
+.rent-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.rent-img-wrapper:hover .rent-overlay {
+    opacity: 1;
+}
+
+/* modal quick view */
+.quickview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+.quickview-content {
+    background: #fff;
+    display: flex;
+    width: 80%;
+    max-width: 1000px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+.quickview-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+.quickview-left {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.quickview-left img {
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+.quickview-thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.quickview-thumbs img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+}
+.quickview-thumbs img.active,
+.quickview-thumbs img:hover {
+    border-color: #007bff;
+}
+.quickview-right {
+    flex: 1;
+    padding: 20px;
+}
+.quickview-right h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+.quickview-right .rent-price {
+    font-size: 1.2rem;
+    color: #ff6600;
+    margin: 8px 0;
+}
+.quickview-right p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+}
+.quickview-right .contact-btn {
+    margin-top: 10px;
+}
+
+.quickview-image {
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+    cursor: zoom-in; /* con trỏ kính lúp */
+}
+
+/* modal zoom */
+.zoom-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.zoomed-image {
+    max-width: 90%;
+    max-height: 90%;
+}
+.zoom-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    border: none;
+    font-size: 20px;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.zoom-close:hover {
+    background: #007bff;
+    color: #fff;
+}

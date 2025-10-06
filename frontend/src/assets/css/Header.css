@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: #ffe8c2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 40px;
+    position: relative;
+    z-index: 10;
+}
+
+.logo img {
+    height: 60px;
+}
+
+.nav-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin-left: 100px;
+}
+
+.nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav li {
+    position: relative;
+    margin: 0 15px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #9c1914;
+    font-weight: bold;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: #cd8123;
+}
+
+.nav li .bi-caret-down-fill {
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+.nav ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #ffe8c2;
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    display: none;
+    min-width: 180px;
+}
+
+.nav ul li {
+    margin: 0;
+}
+
+.nav ul a {
+    display: block;
+    padding: 8px 15px;
+    font-weight: normal;
+}
+
+.nav li:hover > ul {
+    display: block;
+}
+
+/* Search box */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    border: 1px solid #9c1914;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    padding: 5px 8px;
+    font-size: 14px;
+    width: 180px;
+    background-color: white;       /* thêm dòng này */
+    color: #333;                   /* màu chữ */
+}
+
+.search-box input::placeholder {
+    color: #999;                   /* màu placeholder */
+}
+.suggestions {
+    position: absolute;
+    background: #fff;
+    width: 100%;
+    border: 1px solid #ddd;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+}
+
+.suggestions li {
+    padding: 8px 12px;
+}
+
+.suggestions li:hover {
+    background: #f5f5f5;
+}
+
+
+.search-box button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #9c1914;
+    font-size: 16px;
+}
+
+.search-box button:hover {
+    color: #cd8123;
+}

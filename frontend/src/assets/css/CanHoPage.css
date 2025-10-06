@@ -1,0 +1,56 @@
+.card-apartment {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-apartment img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-apartment:hover img {
+    transform: scale(1.05);
+}
+
+.card-apartment .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.card-apartment:hover .overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.card-apartment .overlay i {
+    color: white;
+    font-size: 40px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-apartment:hover .overlay i {
+    opacity: 1;
+}
+
+.card-apartment .info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    padding: 8px;
+}
