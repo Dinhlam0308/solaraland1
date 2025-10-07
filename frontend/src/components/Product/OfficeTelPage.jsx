@@ -2,56 +2,67 @@
 
 import { useEffect, useState } from "react"
 import { getProductsByType, advancedFilterProducts } from "../../api/product"
+import { getProjects } from "../../api/project"
 import { useNavigate } from "react-router-dom"
 import "../../assets/css/CanHoPage.css"
 
 export default function OfficeTelPage() {
     const [products, setProducts] = useState([])
     const [selectedBedrooms, setSelectedBedrooms] = useState([])
-    const [status, setStatus] = useState("sale")
+    const [status, setStatus] = useState("")
     const [priceRange, setPriceRange] = useState("")
+    const [projectsList, setProjectsList] = useState([])
+    const [selectedProjects, setSelectedProjects] = useState([])
+
     const navigate = useNavigate()
 
     useEffect(() => {
-        // gọi dữ liệu office-tel
+        getProjects().then((res) => {
+            const projectData = Array.isArray(res) ? res : res.data || []
+            setProjectsList(projectData)
+        })
+
+        // Gọi dữ liệu office-tel mặc định
         getProductsByType("office-tel").then((data) => setProducts(data))
     }, [])
 
+    // Chọn phòng ngủ
     const handleCheckboxChange = (value) => {
-        if (selectedBedrooms.includes(value)) {
-            setSelectedBedrooms(selectedBedrooms.filter((v) => v !== value))
-        } else {
-            setSelectedBedrooms([...selectedBedrooms, value])
-        }
+        setSelectedBedrooms((prev) =>
+            prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+        )
     }
 
+    // Chọn dự án
+    const handleProjectChange = (id) => {
+        setSelectedProjects((prev) =>
+            prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
+        )
+    }
+
+    // Lọc sản phẩm
     const handleFilter = () => {
         let min = ""
         let max = ""
 
         if (status === "sale") {
-            if (priceRange === "under2") {
-                max = 2000000000
-            } else if (priceRange === "under7") {
-                max = 7000000000
-            } else if (priceRange === "over7") {
-                min = 7000000000
-            }
-        } else {
-            if (priceRange === "under10m") {
-                max = 10000000
-            } else if (priceRange === "under20m") {
-                max = 20000000
-            } else if (priceRange === "over20m") {
-                min = 20000000
-            }
+            if (priceRange === "under2") max = 2000000000
+            else if (priceRange === "under7") max = 7000000000
+            else if (priceRange === "over7") min = 7000000000
+        } else if (status === "rent") {
+            if (priceRange === "under10m") max = 10000000
+            else if (priceRange === "under20m") max = 20000000
+            else if (priceRange === "over20m") min = 20000000
         }
 
         const params = {
             type: "office-tel",
-            status,
-            bedrooms: selectedBedrooms.join(","),
         }
+        if (status) params.status = status
+        if (selectedBedrooms.length > 0)
+            params.bedrooms = selectedBedrooms.join(",")
+        if (selectedProjects.length > 0)
+            params.projectId = selectedProjects.join(",")
         if (min) params.priceMin = min
         if (max) params.priceMax = max
 
@@ -63,12 +74,37 @@ export default function OfficeTelPage() {
             <h1 className="h4 fw-bold mb-4 text-center">Office-tel</h1>
 
             <div className="row">
-                {/* Bộ lọc bên trái */}
+                {/* BỘ LỌC */}
                 <div className="col-md-3">
                     <div className="bg-light p-3 rounded sticky-top">
                         <h5 className="fw-bold mb-3">Bộ lọc</h5>
 
-                        {/* Trạng thái */}
+                        {/* 🔹 Dự án */}
+                        <div className="mb-3">
+                            <label className="form-label d-block">Dự án</label>
+                            {projectsList.length === 0 && (
+                                <p className="text-muted small">Không có dự án</p>
+                            )}
+                            {projectsList.map((proj) => (
+                                <div className="form-check" key={proj._id}>
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id={`proj${proj._id}`}
+                                        checked={selectedProjects.includes(proj._id)}
+                                        onChange={() => handleProjectChange(proj._id)}
+                                    />
+                                    <label
+                                        className="form-check-label ms-2"
+                                        htmlFor={`proj${proj._id}`}
+                                    >
+                                        {proj.name}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* 🔹 Trạng thái */}
                         <div className="mb-3">
                             <label className="form-label d-block">Trạng thái</label>
                             <div className="form-check form-check-inline">
@@ -107,7 +143,7 @@ export default function OfficeTelPage() {
                             </div>
                         </div>
 
-                        {/* Giá */}
+                        {/* 🔹 Giá */}
                         <div className="mb-3">
                             <label className="form-label d-block">Giá</label>
                             {status === "sale" ? (
@@ -155,7 +191,7 @@ export default function OfficeTelPage() {
                                         </label>
                                     </div>
                                 </>
-                            ) : (
+                            ) : status === "rent" ? (
                                 <>
                                     <div className="form-check">
                                         <input
@@ -200,10 +236,12 @@ export default function OfficeTelPage() {
                                         </label>
                                     </div>
                                 </>
+                            ) : (
+                                <p className="text-muted small">(Chọn Mua/Thuê để lọc giá)</p>
                             )}
                         </div>
 
-                        {/* Phòng ngủ */}
+                        {/* 🔹 Phòng ngủ */}
                         <div className="mb-3">
                             <label className="form-label d-block">Phòng ngủ</label>
                             {[1, 2, 3].map((n) => (
@@ -240,7 +278,7 @@ export default function OfficeTelPage() {
                     </div>
                 </div>
 
-                {/* Danh sách sản phẩm bên phải */}
+                {/* DANH SÁCH SẢN PHẨM */}
                 <div className="col-md-9">
                     <div className="d-flex flex-wrap justify-content-start gap-4">
                         {products.map((product) => (
@@ -250,13 +288,18 @@ export default function OfficeTelPage() {
                                 onClick={() => navigate(`/san-pham/${product.name}`)}
                                 style={{ cursor: "pointer" }}
                             >
-                                <img src={product.mainImage || "/placeholder.jpg"} alt={product.name} />
+                                <img
+                                    src={product.mainImage || "/placeholder.jpg"}
+                                    alt={product.name}
+                                />
                                 <div className="overlay">
-                                    <i className="bi bi-briefcase"></i> {/* icon đổi sang briefcase */}
+                                    <i className="bi bi-briefcase"></i>
                                 </div>
                                 <div className="info">
                                     <h6 className="mb-1">{product.name}</h6>
-                                    <p className="mb-1 small">{product.price.toLocaleString()} đ</p>
+                                    <p className="mb-1 small">
+                                        {Number(product.price).toLocaleString()} đ
+                                    </p>
                                     <a
                                         href={`https://zalo.me/0123456789`}
                                         target="_blank"

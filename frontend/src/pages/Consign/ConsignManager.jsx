@@ -19,17 +19,18 @@ const ConsignManager = () => {
         status: "sale",
     });
 
+    const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const navigate = useNavigate();
 
+    // Tracking visitor
     useEffect(() => {
         let visitorId = localStorage.getItem("visitorId");
         if (!visitorId) {
             visitorId = crypto.randomUUID();
             localStorage.setItem("visitorId", visitorId);
         }
-
         axios
             .post("http://localhost:3001/api/stats/track-visit", {
                 page: window.location.pathname,
@@ -39,34 +40,41 @@ const ConsignManager = () => {
             .catch((err) => console.error("Error tracking visit", err));
     }, []);
 
+    // Input change handler
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        setErrors((prev) => ({ ...prev, [name]: "" })); // clear lỗi khi user sửa
     };
 
-    const handleRemoveImage = (url) => {
-        setFormData((prev) => ({
-            ...prev,
-            images: prev.images.filter((img) => img !== url),
-        }));
+    // Validate trước khi submit
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.name.trim()) newErrors.name = "Vui lòng nhập tên của bạn";
+        if (!formData.phone.trim()) newErrors.phone = "Vui lòng nhập số điện thoại";
+        else if (!/^(0\d{9,10})$/.test(formData.phone))
+            newErrors.phone = "Số điện thoại không hợp lệ";
+        if (!formData.apartmentType)
+            newErrors.apartmentType = "Vui lòng chọn loại bất động sản";
+        if (!formData.expectedPrice)
+            newErrors.expectedPrice = "Vui lòng nhập giá mong đợi";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
+    // Upload ảnh
     const handleFileUpload = async (e) => {
         const files = Array.from(e.target.files);
         if (!files.length) return;
 
         if (formData.images.length + files.length > 5) {
-            alert(`Bạn chỉ được upload tối đa 5 ảnh. Hiện có ${formData.images.length} ảnh rồi.`);
+            alert(`Bạn chỉ được upload tối đa 5 ảnh.`);
             return;
         }
 
         try {
             setUploading(true);
-
-            // lấy chữ ký upload Cloudinary từ server
             const sigRes = await axios.get("http://localhost:3001/api/cloudinary/signature");
             const { timestamp, signature, apiKey, cloudName, folder } = sigRes.data;
 
@@ -77,7 +85,6 @@ const ConsignManager = () => {
                 fd.append("timestamp", timestamp);
                 fd.append("signature", signature);
                 fd.append("folder", folder);
-
                 return axios.post(
                     `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
                     fd,
@@ -87,11 +94,7 @@ const ConsignManager = () => {
 
             const results = await Promise.all(uploadPromises);
             const urls = results.map((r) => r.data.secure_url);
-
-            setFormData((prev) => ({
-                ...prev,
-                images: [...prev.images, ...urls],
-            }));
+            setFormData((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
         } catch (err) {
             console.error("Error uploading file", err);
             alert("Upload ảnh thất bại");
@@ -100,8 +103,18 @@ const ConsignManager = () => {
         }
     };
 
+    // Xóa ảnh
+    const handleRemoveImage = (url) => {
+        setFormData((prev) => ({
+            ...prev,
+            images: prev.images.filter((img) => img !== url),
+        }));
+    };
+
+    // Submit form
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
         if (uploading) {
             alert("Vui lòng đợi upload ảnh xong trước khi ký gửi");
             return;
@@ -123,30 +136,32 @@ const ConsignManager = () => {
         <div className="form-container">
             <h2 className="form-title">Thêm Consign mới</h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
+                {/* Tên */}
                 <div className="mb-3">
-                    <label className="form-label">Tên</label>
+                    <label className="form-label">Tên *</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.name ? "is-invalid" : ""}`}
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        required
                     />
+                    {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                 </div>
 
+                {/* Số điện thoại và email */}
                 <div className="row">
                     <div className="col-md-6 mb-3">
-                        <label className="form-label">Điện thoại</label>
+                        <label className="form-label">Điện thoại *</label>
                         <input
                             type="text"
-                            className="form-control"
+                            className={`form-control ${errors.phone ? "is-invalid" : ""}`}
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
-                            required
                         />
+                        {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                     </div>
                     <div className="col-md-6 mb-3">
                         <label className="form-label">Email</label>
@@ -160,6 +175,7 @@ const ConsignManager = () => {
                     </div>
                 </div>
 
+                {/* Loại và dự án */}
                 <div className="row">
                     <div className="col-md-6 mb-3">
                         <label className="form-label">Dự án</label>
@@ -172,9 +188,9 @@ const ConsignManager = () => {
                         />
                     </div>
                     <div className="col-md-6 mb-3">
-                        <label className="form-label">Loại bất động sản</label>
+                        <label className="form-label">Loại bất động sản *</label>
                         <select
-                            className="form-select"
+                            className={`form-select ${errors.apartmentType ? "is-invalid" : ""}`}
                             name="apartmentType"
                             value={formData.apartmentType}
                             onChange={handleChange}
@@ -186,9 +202,13 @@ const ConsignManager = () => {
                             <option value="office-tel">Office-tel</option>
                             <option value="nha-pho">Nhà phố</option>
                         </select>
+                        {errors.apartmentType && (
+                            <div className="invalid-feedback">{errors.apartmentType}</div>
+                        )}
                     </div>
                 </div>
 
+                {/* Giá mong đợi */}
                 <div className="row">
                     <div className="col-md-4 mb-3">
                         <label className="form-label">Số phòng ngủ</label>
@@ -201,14 +221,17 @@ const ConsignManager = () => {
                         />
                     </div>
                     <div className="col-md-4 mb-3">
-                        <label className="form-label">Giá mong đợi</label>
+                        <label className="form-label">Giá mong đợi *</label>
                         <input
                             type="number"
-                            className="form-control"
+                            className={`form-control ${errors.expectedPrice ? "is-invalid" : ""}`}
                             name="expectedPrice"
                             value={formData.expectedPrice}
                             onChange={handleChange}
                         />
+                        {errors.expectedPrice && (
+                            <div className="invalid-feedback">{errors.expectedPrice}</div>
+                        )}
                     </div>
                     <div className="col-md-4 mb-3">
                         <label className="form-label">Hình thức</label>
@@ -224,6 +247,7 @@ const ConsignManager = () => {
                     </div>
                 </div>
 
+                {/* Upload ảnh */}
                 <div className="mb-3">
                     <label className="form-label">Tải tối đa 5 ảnh</label>
                     <input
@@ -234,46 +258,23 @@ const ConsignManager = () => {
                     />
                     {uploading && (
                         <div className="my-2 d-flex align-items-center">
-                            <div className="spinner-border" role="status">
-                                <span className="visually-hidden">Đang upload...</span>
-                            </div>
+                            <div className="spinner-border" role="status"></div>
                             <span className="ms-2">Đang upload ảnh...</span>
                         </div>
                     )}
                     <small className="upload-info">
                         Đã upload {formData.images.length}/5 ảnh
                     </small>
-                    <div className="image-preview-grid">
-                        {formData.images.map((url, idx) => (
-                            <div key={idx} className="image-preview-item">
-                                <img
-                                    src={url || "/placeholder.svg"}
-                                    alt="uploaded"
-                                    className="image-preview-thumbnail"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => handleRemoveImage(url)}
-                                    className="image-remove-button"
-                                >
-                                    ×
-                                </button>
-                            </div>
-                        ))}
-                    </div>
                 </div>
 
+                {/* Submit */}
                 <div className="mt-4 text-center">
                     <button
                         type="submit"
-                        className="btn-primary"
+                        className="btn btn-primary px-4"
                         disabled={loading || uploading}
                     >
-                        {loading
-                            ? "Đang lưu..."
-                            : uploading
-                                ? "Đang upload ảnh..."
-                                : "Ký gửi"}
+                        {loading ? "Đang lưu..." : "Ký gửi"}
                     </button>
                 </div>
             </form>

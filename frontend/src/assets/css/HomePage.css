@@ -226,18 +226,6 @@
     transition: opacity 0.4s ease;
 }
 
-.rent-overlay i {
-    font-size: 32px;
-    margin-bottom: 10px;
-}
-
-.rent-overlay span {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-}
-
 .rent-img-wrapper:hover .rent-overlay {
     opacity: 1;
 }
@@ -258,7 +246,6 @@
     margin: 0 0 8px;
     font-weight: 700;
     color: #1a2332;
-    letter-spacing: 0.5px;
 }
 
 .rent-price {
@@ -266,7 +253,6 @@
     color: #c9a961;
     margin: 8px 0 16px;
     font-weight: 700;
-    letter-spacing: 0.5px;
 }
 
 .contact-btn {
@@ -276,18 +262,15 @@
     padding: 10px 24px;
     border-radius: 25px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s;
     font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 12px rgba(26, 35, 50, 0.2);
 }
 
 .contact-btn:hover {
     background: linear-gradient(135deg, #c9a961 0%, #d4b76e 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.4);
 }
 
 /* ===== SLIDER ARROWS ===== */
@@ -298,7 +281,7 @@
     transform: translateY(-50%);
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    background: #fff;
     border: 2px solid rgba(201, 169, 97, 0.3);
     display: flex !important;
     align-items: center;
@@ -307,10 +290,9 @@
     font-size: 24px;
     cursor: pointer;
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s;
     z-index: 5;
     border-radius: 50%;
-    box-shadow: 0 4px 16px rgba(26, 35, 50, 0.15);
 }
 
 .custom-prev:hover,
@@ -318,8 +300,6 @@
     background: linear-gradient(135deg, #c9a961 0%, #d4b76e 100%);
     color: #fff;
     border-color: #c9a961;
-    box-shadow: 0 6px 24px rgba(201, 169, 97, 0.4);
-    transform: translateY(-50%) scale(1.1);
 }
 
 .custom-prev {
@@ -363,14 +343,8 @@
 }
 
 @keyframes modalSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from {opacity: 0; transform: translateY(-30px);}
+    to {opacity: 1; transform: translateY(0);}
 }
 
 .quickview-close {
@@ -389,8 +363,6 @@
     justify-content: center;
     transition: all 0.3s ease;
     color: #1a2332;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .quickview-close:hover {
@@ -399,18 +371,14 @@
     transform: rotate(90deg);
 }
 
-.quickview-left {
-    flex: 1;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #f8f9fa;
-}
+/* Modal Layout */
+.quickview-left {flex: 1; padding: 30px; background: #f8f9fa;}
+.quickview-right {flex: 1; padding: 40px;}
 
 .quickview-image-container {
     width: 100%;
     max-width: 500px;
+    margin: auto;
 }
 
 .quickview-image {
@@ -420,11 +388,6 @@
     border-radius: 12px;
     cursor: zoom-in;
     box-shadow: 0 8px 24px rgba(26, 35, 50, 0.15);
-    transition: transform 0.3s ease;
-}
-
-.quickview-image:hover {
-    transform: scale(1.02);
 }
 
 .quickview-thumbs {
@@ -443,55 +406,10 @@
     border: 3px solid transparent;
     border-radius: 8px;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(26, 35, 50, 0.1);
 }
 
 .quickview-thumbs img.active {
     border-color: #c9a961;
-    transform: scale(1.05);
-}
-
-.quickview-thumbs img:hover {
-    border-color: #10b981;
-    transform: scale(1.05);
-}
-
-.quickview-right {
-    flex: 1;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.quickview-right h3 {
-    margin-top: 0;
-    font-size: 2rem;
-    color: #1a2332;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-bottom: 16px;
-}
-
-.quickview-right .rent-price {
-    font-size: 1.5rem;
-    color: #c9a961;
-    margin: 12px 0 20px;
-    font-weight: 700;
-}
-
-.quickview-right p {
-    font-size: 1rem;
-    color: #4a5568;
-    line-height: 1.7;
-    margin-bottom: 24px;
-}
-
-.quickview-right .contact-btn {
-    margin-top: 16px;
-    padding: 14px 32px;
-    font-size: 1rem;
-    align-self: flex-start;
 }
 
 /* ===== ZOOM MODAL ===== */
@@ -506,7 +424,6 @@
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    backdrop-filter: blur(8px);
 }
 
 .zoomed-image {
@@ -514,18 +431,6 @@
     max-height: 95%;
     border-radius: 8px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: zoomIn 0.3s ease-out;
-}
-
-@keyframes zoomIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
 }
 
 .zoom-close {
@@ -543,64 +448,69 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
     color: #1a2332;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-.zoom-close:hover {
-    background: #c9a961;
-    color: #fff;
-    transform: rotate(90deg) scale(1.1);
-}
-
-/* ===== RESPONSIVE DESIGN ===== */
+/* ===== RESPONSIVE TABLET ===== */
 @media (max-width: 1024px) {
-    .banner-content h1 {
-        font-size: 3.5rem;
+    .banner {height: 500px;}
+    .banner-content h1 {font-size: 3rem;}
+    .banner-content p {font-size: 1.2rem;}
+    .du-an-dang-ban {gap: 20px; padding: 0 20px;}
+    .project-card {width: 45%; height: 260px;}
+    .quickview-content {width: 95%; flex-direction: column; overflow-y: auto; max-height: 90vh;}
+    .custom-prev, .custom-next {display: none !important;}
+}
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 768px) {
+    .banner {height: 420px;}
+    .banner-content h1 {font-size: 2.2rem;}
+    .banner-content p {font-size: 1rem;}
+    .du-an-dang-ban {flex-direction: column; padding: 0 15px;}
+    .project-card {width: 100%; max-width: 380px; height: 240px;}
+    .rent-card {width: 95%;}
+    .quickview-content {width: 95%; flex-direction: column; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease;}
+}
+
+/* Hiệu ứng trượt QuickView trên mobile */
+@keyframes slideUp {
+    from {transform: translateY(100%); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+/* ===== EXTRA SMALL MOBILE ===== */
+@media (max-width: 480px) {
+    .banner {height: 350px;}
+    .banner-content h1 {font-size: 1.8rem;}
+    .banner-content p {font-size: 0.9rem;}
+    .project-card {max-width: 340px; height: 220px;}
+    .rent-info h3 {font-size: 0.95rem;}
+    .rent-price {font-size: 0.95rem;}
+    .contact-btn {font-size: 0.8rem; padding: 6px 18px;}
+    .quickview-image {height: 250px;}
+}
+/* ===== RESPONSIVE SLIDER (MOBILE FIX) ===== */
+@media (max-width: 768px) {
+    .rent-slider-container {
+        max-width: 100%;
+        padding: 0 10px;
     }
 
-    .du-an-dang-ban {
-        margin-left: 0;
+    .slick-slide {
+        display: flex !important;
         justify-content: center;
     }
 
-    .project-card {
-        width: 350px;
-        height: 280px;
+    .rent-card {
+        width: 90%;
+        max-width: 360px;
     }
 }
 
-@media (max-width: 768px) {
-    .banner {
-        height: 500px;
-    }
-
-    .banner-content h1 {
-        font-size: 2.5rem;
-    }
-
-    .banner-content p {
-        font-size: 1.2rem;
-    }
-
-    .selection-title h2 {
-        font-size: 2rem;
-    }
-
-    .project-card {
+@media (max-width: 480px) {
+    .rent-card {
         width: 100%;
-        max-width: 400px;
-    }
-
-    .quickview-content {
-        flex-direction: column;
-        width: 95%;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .quickview-image {
-        height: 350px;
+        max-width: 340px;
     }
 }

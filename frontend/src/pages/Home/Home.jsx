@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -17,24 +17,19 @@ const projects = [
     { slug: "victoria-village", name: "Victoria Village", img: "/images/trangchu_VictoriaVillage.jpg", alt: "Dự án Victoria Village" },
 ];
 
-const PrevArrow = (props) => {
-    const { onClick } = props;
-    return (
-        <div className="custom-arrow custom-prev" onClick={onClick}>
-            <span>&#10094;</span>
-        </div>
-    );
-};
-const NextArrow = (props) => {
-    const { onClick } = props;
-    return (
-        <div className="custom-arrow custom-next" onClick={onClick}>
-            <span>&#10095;</span>
-        </div>
-    );
-};
+const PrevArrow = ({ onClick }) => (
+    <div className="custom-arrow custom-prev" onClick={onClick}>
+        <span>&#10094;</span>
+    </div>
+);
 
-const HomePage = () => {
+const NextArrow = ({ onClick }) => (
+    <div className="custom-arrow custom-next" onClick={onClick}>
+        <span>&#10095;</span>
+    </div>
+);
+
+const Home = () => {
     const [rentProducts, setRentProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [activeImage, setActiveImage] = useState(null);
@@ -54,6 +49,7 @@ const HomePage = () => {
         });
     }, []);
 
+    // ✅ Slider responsive chuẩn
     const sliderSettings = {
         dots: true,
         infinite: false,
@@ -64,18 +60,52 @@ const HomePage = () => {
         prevArrow: <PrevArrow />,
         nextArrow: <NextArrow />,
         responsive: [
-            { breakpoint: 1024, settings: { slidesToShow: 3 } },
-            { breakpoint: 768, settings: { slidesToShow: 2 } },
-            { breakpoint: 480, settings: { slidesToShow: 1 } },
+            {
+                breakpoint: 1200, // laptop
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    arrows: false,
+                },
+            },
+            {
+                breakpoint: 992, // tablet
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    arrows: false,
+                },
+            },
+            {
+                breakpoint: 768, // ✅ mobile
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    arrows: false,
+                    dots: true,
+                    centerMode: true,
+                    centerPadding: "0px",
+                },
+            },
         ],
     };
 
+    // ✅ Bắt slick cập nhật sau khi load (fix trường hợp không nhận breakpoint mobile)
+    useEffect(() => {
+        const handleResize = () => {
+            window.dispatchEvent(new Event("resize"));
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     return (
         <>
-            {/* Banner */}
+            {/* ===== Banner ===== */}
             <div className="banner">
                 <video autoPlay muted loop playsInline>
-                    <source src={bannerVideo} type="video/mp4"/>
+                    <source src={bannerVideo} type="video/mp4" />
                     Trình duyệt của bạn không hỗ trợ video.
                 </video>
                 <div className="overlay"></div>
@@ -85,66 +115,65 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* DỰ ÁN */}
+            {/* ===== DỰ ÁN ===== */}
             <div className="selection-title">
-            <h2>DỰ ÁN ĐANG BÁN</h2>
+                <h2>DỰ ÁN ĐANG BÁN</h2>
             </div>
             <div className="du-an-dang-ban">
                 {projects.map((project) => (
                     <Link to={`/trang-chu/${project.slug}`} key={project.slug}>
                         <div className="project-card">
-                            <img src={project.img} alt={project.alt} title={project.alt}/>
+                            <img src={project.img} alt={project.alt} title={project.alt} />
                             <div className="project-name">{project.name}</div>
                         </div>
                     </Link>
                 ))}
             </div>
 
-            {/* CĂN HỘ */
-            }
+            {/* ===== CĂN HỘ CHO THUÊ ===== */}
             <div className="selection-title">
                 <h2>CĂN HỘ CHO THUÊ</h2>
-                <div className="rent-slider-container">
-                    <Slider {...sliderSettings}>
-                        {rentProducts.map((item) => (
-                            <div key={item._id} className="slide-wrapper">
-                                <div className="rent-card">
-                                    <div
-                                        className="rent-img-wrapper"
-                                        onClick={() => {
-                                            setSelectedProduct(item);
-                                            setActiveImage(item.mainImage);
-                                        }}
-                                    >
-                                        <img src={item.mainImage} alt={item.name} className="rent-img"/>
-                                        <div className="rent-overlay">
-                                            <FaHome size={28} style={{marginBottom: "6px"}}/>
-                                            <span>Quick View</span>
-                                        </div>
-                                    </div>
-                                    <div className="rent-info">
-                                        <h3>{item.name}</h3>
-                                        <p className="rent-price">{item.price?.toLocaleString()} VND/tháng</p>
-                                        <button
-                                            className="contact-btn"
-                                            onClick={() => window.open(`https://zalo.me/so-zalo`, "_blank")}
-                                        >
-                                            Liên hệ
-                                        </button>
+            </div>
+            <div className="rent-slider-container">
+                <Slider {...sliderSettings}>
+                    {rentProducts.map((item) => (
+                        <div key={item._id} className="slide-wrapper">
+                            <div className="rent-card">
+                                <div
+                                    className="rent-img-wrapper"
+                                    onClick={() => {
+                                        setSelectedProduct(item);
+                                        setActiveImage(item.mainImage);
+                                    }}
+                                >
+                                    <img src={item.mainImage} alt={item.name} className="rent-img" />
+                                    <div className="rent-overlay">
+                                        <FaHome size={28} style={{ marginBottom: "6px" }} />
+                                        <span>Quick View</span>
                                     </div>
                                 </div>
+                                <div className="rent-info">
+                                    <h3>{item.name}</h3>
+                                    <p className="rent-price">{item.price?.toLocaleString()} VND/tháng</p>
+                                    <button
+                                        className="contact-btn"
+                                        onClick={() => window.open(`https://zalo.me/so-zalo`, "_blank")}
+                                    >
+                                        Liên hệ
+                                    </button>
+                                </div>
                             </div>
-                        ))}
-                    </Slider>
-                </div>
+                        </div>
+                    ))}
+                </Slider>
             </div>
 
-            {/* MODAL QUICK VIEW */}
+            {/* ===== MODAL QUICK VIEW ===== */}
             {selectedProduct && (
                 <div className="quickview-modal">
                     <div className="quickview-content">
                         <button className="quickview-close" onClick={() => setSelectedProduct(null)}>
-                            <FaTimes/>
+                            <FaTimes />
                         </button>
                         <div className="quickview-left">
                             <div className="quickview-image-container">
@@ -182,17 +211,17 @@ const HomePage = () => {
                 </div>
             )}
 
-            {/* MODAL ZOOM */}
+            {/* ===== MODAL ZOOM ===== */}
             {zoomImage && (
                 <div className="zoom-modal" onClick={() => setZoomImage(null)}>
                     <button className="zoom-close" onClick={() => setZoomImage(null)}>
-                        <FaTimes/>
+                        <FaTimes />
                     </button>
-                    <img src={zoomImage} alt="Zoom" className="zoomed-image"/>
+                    <img src={zoomImage} alt="Zoom" className="zoomed-image" />
                 </div>
             )}
         </>
     );
 };
 
-export default HomePage;
+export default Home;

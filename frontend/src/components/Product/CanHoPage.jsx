@@ -1,71 +1,72 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getProductsByType, advancedFilterProducts } from "../../api/product";
 import { getProjects } from "../../api/project";
-import { useNavigate } from "react-router-dom";
 import "../../assets/css/CanHoPage.css";
 
 export default function CanHoPage() {
     const [products, setProducts] = useState([]);
     const [selectedBedrooms, setSelectedBedrooms] = useState([]);
-    const [status, setStatus] = useState("sale"); // mặc định mua
-    const [priceRange, setPriceRange] = useState(""); // under2, under7...
+    const [status, setStatus] = useState(""); // ❌ Không mặc định "sale"
+    const [priceRange, setPriceRange] = useState("");
 
-    const [projectsList, setProjectsList] = useState([]); // danh sách dự án
-    const [selectedProject, setSelectedProject] = useState(""); // dự án đang chọn
+    const [projectsList, setProjectsList] = useState([]);
+    const [selectedProjects, setSelectedProjects] = useState([]);
 
     const navigate = useNavigate();
 
-    // load danh sách dự án + sản phẩm mặc định
+    // 🧩 Lấy danh sách dự án + sản phẩm mặc định
     useEffect(() => {
-        getProjects().then((data) => {
-            // ép về mảng an toàn
-            const arr = Array.isArray(data) ? data : data.projects || [];
-            setProjectsList(arr);
+        getProjects().then((res) => {
+            console.log("Projects API:", res);
+            const projectData = Array.isArray(res) ? res : res.data || [];
+            setProjectsList(projectData);
         });
 
         getProductsByType("can-ho").then((data) => setProducts(data));
     }, []);
 
+    // ✅ toggle checkbox phòng ngủ
     const handleCheckboxChange = (value) => {
-        if (selectedBedrooms.includes(value)) {
-            setSelectedBedrooms(selectedBedrooms.filter((v) => v !== value));
-        } else {
-            setSelectedBedrooms([...selectedBedrooms, value]);
-        }
+        setSelectedBedrooms((prev) =>
+            prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+        );
     };
 
+    // ✅ toggle checkbox dự án
+    const handleProjectChange = (id) => {
+        setSelectedProjects((prev) =>
+            prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
+        );
+    };
+
+    // ✅ Lọc sản phẩm
     const handleFilter = () => {
         let min = "";
         let max = "";
 
         if (status === "sale") {
-            if (priceRange === "under2") {
-                max = 2000000000; // 2 tỷ
-            } else if (priceRange === "under7") {
-                max = 7000000000; // 7 tỷ
-            } else if (priceRange === "over7") {
-                min = 7000000000; // trên 7 tỷ
-            }
-        } else {
-            if (priceRange === "under10m") {
-                max = 10000000; // 10 triệu
-            } else if (priceRange === "under20m") {
-                max = 20000000; // 20 triệu
-            } else if (priceRange === "over20m") {
-                min = 20000000; // trên 20 triệu
-            }
+            if (priceRange === "under2") max = 2000000000;
+            else if (priceRange === "under7") max = 7000000000;
+            else if (priceRange === "over7") min = 7000000000;
+        } else if (status === "rent") {
+            if (priceRange === "under10m") max = 10000000;
+            else if (priceRange === "under20m") max = 20000000;
+            else if (priceRange === "over20m") min = 20000000;
         }
 
         const params = {
             type: "can-ho",
-            status,
-            bedrooms: selectedBedrooms.join(","), // 1,2,3
         };
+        if (status) params.status = status;
+        if (selectedBedrooms.length > 0)
+            params.bedrooms = selectedBedrooms.join(",");
+        if (selectedProjects.length > 0)
+            params.projectId = selectedProjects.join(",");
         if (min) params.priceMin = min;
         if (max) params.priceMax = max;
-        if (selectedProject) params.projectId = selectedProject; // lọc theo dự án
 
         advancedFilterProducts(params).then((data) => setProducts(data));
     };
@@ -75,29 +76,42 @@ export default function CanHoPage() {
             <h1 className="h4 fw-bold mb-4 text-center">Căn hộ</h1>
 
             <div className="row">
-                {/* Bộ lọc bên trái */}
+                {/* BỘ LỌC */}
                 <div className="col-md-3">
                     <div className="bg-light p-3 rounded sticky-top">
                         <h5 className="fw-bold mb-3">Bộ lọc</h5>
 
-                        {/* Chọn dự án */}
+                        {/* 🔹 Dự án */}
                         <div className="mb-3">
                             <label className="form-label d-block">Dự án</label>
-                            <select
-                                className="form-select"
-                                value={selectedProject}
-                                onChange={(e) => setSelectedProject(e.target.value)}
-                            >
-                                <option value="">Tất cả</option>
-                                {projectsList.map((proj) => (
-                                    <option key={proj._id} value={proj._id}>
-                                        {proj.name}
-                                    </option>
-                                ))}
-                            </select>
+                            {projectsList.length === 0 && (
+                                <p className="text-muted small">Không có dự án</p>
+                            )}
+                            {projectsList.map((proj) => (
+                                <div
+                                    className="form-check d-flex justify-content-between align-items-center"
+                                    key={proj._id}
+                                >
+                                    <div>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id={`proj${proj._id}`}
+                                            checked={selectedProjects.includes(proj._id)}
+                                            onChange={() => handleProjectChange(proj._id)}
+                                        />
+                                        <label
+                                            className="form-check-label ms-2"
+                                            htmlFor={`proj${proj._id}`}
+                                        >
+                                            {proj.name}
+                                        </label>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
-                        {/* Trạng thái */}
+                        {/* 🔹 Trạng thái */}
                         <div className="mb-3">
                             <label className="form-label d-block">Trạng thái</label>
                             <div className="form-check form-check-inline">
@@ -136,7 +150,7 @@ export default function CanHoPage() {
                             </div>
                         </div>
 
-                        {/* Giá */}
+                        {/* 🔹 Giá */}
                         <div className="mb-3">
                             <label className="form-label d-block">Giá</label>
                             {status === "sale" ? (
@@ -184,7 +198,7 @@ export default function CanHoPage() {
                                         </label>
                                     </div>
                                 </>
-                            ) : (
+                            ) : status === "rent" ? (
                                 <>
                                     <div className="form-check">
                                         <input
@@ -229,10 +243,14 @@ export default function CanHoPage() {
                                         </label>
                                     </div>
                                 </>
+                            ) : (
+                                <p className="text-muted small">
+                                    (Chọn Mua hoặc Thuê để lọc theo giá)
+                                </p>
                             )}
                         </div>
 
-                        {/* Phòng ngủ */}
+                        {/* 🔹 Phòng ngủ */}
                         <div className="mb-3">
                             <label className="form-label d-block">Phòng ngủ</label>
                             {[1, 2, 3].map((n) => (
@@ -269,7 +287,7 @@ export default function CanHoPage() {
                     </div>
                 </div>
 
-                {/* Danh sách sản phẩm bên phải */}
+                {/* DANH SÁCH SẢN PHẨM */}
                 <div className="col-md-9">
                     <div className="d-flex flex-wrap justify-content-start gap-4">
                         {products.map((product) => (
