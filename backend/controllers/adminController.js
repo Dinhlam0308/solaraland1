@@ -27,7 +27,7 @@ exports.requestLogin = async (req, res) => {
         });
 
         // Link login cho frontend (khi deploy đổi lại domain)
-        const loginUrl = `http://localhost:5173/verify?token=${token}`;
+        const loginUrl = `http://localhost:5174/verify?token=${token}`;
 
         // Gửi mail
         await transporter.sendMail({
