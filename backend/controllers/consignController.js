@@ -1,4 +1,4 @@
-const Consign = require("../models/consign");
+const Consign = require("../models/Consign");
 const nodemailer = require("nodemailer");
 
 // ==============================
