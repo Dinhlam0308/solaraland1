@@ -6,7 +6,7 @@ export default function ProjectList() {
     const [projects, setProjects] = useState([]); // mặc định là mảng
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
-    const pageSize = 20;
+    const pageSize = 10;
     const navigate = useNavigate();
 
     // Lấy danh sách dự án

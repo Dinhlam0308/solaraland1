@@ -6,6 +6,8 @@ const ConsignList = () => {
     const [consigns, setConsigns] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1); // 👈 trạng thái trang hiện tại
+    const consignsPerPage = 10; // 👈 hiển thị 10 bản ghi mỗi trang
 
     const navigate = useNavigate();
 
@@ -28,14 +30,28 @@ const ConsignList = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Bạn có chắc muốn xoá consign này?')) {
             await deleteConsign(id);
-            fetchConsigns(); // load lại danh sách
+            fetchConsigns();
         }
     };
 
-    // Lọc consign theo tên
-    const filteredConsigns = consigns.filter((c) =>
-        c.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // 🔍 Lọc consign theo tên hoặc dự án
+    const filteredConsigns = consigns.filter((c) => {
+        const nameMatch = c.name?.toLowerCase().includes(searchTerm.toLowerCase());
+        const projectMatch = c.project?.toLowerCase().includes(searchTerm.toLowerCase());
+        return nameMatch || projectMatch;
+    });
+
+    // 🔢 Tính toán phân trang
+    const totalPages = Math.ceil(filteredConsigns.length / consignsPerPage);
+    const startIndex = (currentPage - 1) * consignsPerPage;
+    const currentConsigns = filteredConsigns.slice(startIndex, startIndex + consignsPerPage);
+
+    // 🔁 Xử lý chuyển trang
+    const goToPage = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
 
     if (loading) return <p>Đang tải...</p>;
 
@@ -51,13 +67,17 @@ const ConsignList = () => {
                 </button>
             </div>
 
+            {/* Ô tìm kiếm */}
             <div className="mb-3">
                 <input
                     type="text"
-                    placeholder="Tìm kiếm theo tên..."
+                    placeholder="Tìm kiếm theo tên hoặc dự án..."
                     className="form-control"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1); // reset về trang 1 khi tìm kiếm
+                    }}
                 />
             </div>
 
@@ -73,7 +93,7 @@ const ConsignList = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {filteredConsigns.map((c) => (
+                    {currentConsigns.map((c) => (
                         <tr key={c._id}>
                             <td>
                                 <Link to={`/consign/${c._id}`} className="text-decoration-none">
@@ -83,17 +103,17 @@ const ConsignList = () => {
                             <td>{c.project}</td>
                             <td>{c.apartmentType}</td>
                             <td>
-                  <span
-                      className={`badge ${
-                          c.transactionStatus === 'available'
-                              ? 'bg-success'
-                              : c.transactionStatus === 'sold'
-                                  ? 'bg-danger'
-                                  : 'bg-warning text-dark'
-                      }`}
-                  >
-                    {c.transactionStatus}
-                  </span>
+                                    <span
+                                        className={`badge ${
+                                            c.transactionStatus === 'available'
+                                                ? 'bg-success'
+                                                : c.transactionStatus === 'sold'
+                                                    ? 'bg-danger'
+                                                    : 'bg-warning text-dark'
+                                        }`}
+                                    >
+                                        {c.transactionStatus}
+                                    </span>
                             </td>
                             <td>
                                 <button
@@ -106,7 +126,7 @@ const ConsignList = () => {
                         </tr>
                     ))}
 
-                    {filteredConsigns.length === 0 && (
+                    {currentConsigns.length === 0 && (
                         <tr>
                             <td colSpan="5" className="text-center">
                                 Không tìm thấy consign nào
@@ -116,6 +136,31 @@ const ConsignList = () => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Phân trang */}
+            {totalPages > 1 && (
+                <div className="d-flex justify-content-center align-items-center mt-3">
+                    <button
+                        className="btn btn-outline-primary me-2"
+                        disabled={currentPage === 1}
+                        onClick={() => goToPage(currentPage - 1)}
+                    >
+                        ← Trước
+                    </button>
+
+                    <span>
+                        Trang {currentPage} / {totalPages}
+                    </span>
+
+                    <button
+                        className="btn btn-outline-primary ms-2"
+                        disabled={currentPage === totalPages}
+                        onClick={() => goToPage(currentPage + 1)}
+                    >
+                        Sau →
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

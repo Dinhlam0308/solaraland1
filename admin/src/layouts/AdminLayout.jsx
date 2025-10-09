@@ -1,13 +1,15 @@
 import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
-import Dashboard from '../pages/Dashboard';
 
-const AdminLayout = () => {
+const AdminLayout = ({ children }) => {
     return (
         <div className="d-flex">
+            {/* Sidebar cố định */}
             <Sidebar />
-            <div className="flex-grow-1">
-                <Dashboard />
+
+            {/* Phần nội dung */}
+            <div className="flex-grow-1 bg-light" style={{ minHeight: '100vh' }}>
+                {children}
             </div>
         </div>
     );

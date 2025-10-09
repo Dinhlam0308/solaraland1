@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { getProducts, deleteProduct, updateProduct } from '../../api/product';
 import { useNavigate } from 'react-router-dom';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
