@@ -9,8 +9,8 @@ function getThumbnail(url, width = 300, height = 300) {
     return url.replace("/upload/", `/upload/w_${width},h_${height},c_limit/`);
 }
 
-export default function LavidaPlusPage() {
-    const lavidaplusProjectId = "68deeda9b4ac593ffd50261a";
+export default function VinhomePage() {
+    const VinhomeProjectId = "68deeda9b4ac593ffd50261a";
     const [allProducts, setAllProducts] = useState([]);
     const [products, setProducts] = useState([]);
     const [projectInfo, setProjectInfo] = useState(null);
@@ -26,12 +26,12 @@ export default function LavidaPlusPage() {
     const zaloNumber = "0123456789";
 
     useEffect(() => {
-        getProjectWithSaleProducts(lavidaplusProjectId).then((data) => {
+        getProjectWithSaleProducts(VinhomeProjectId).then((data) => {
             setAllProducts(data.products || []);
             setProducts(data.products || []);
             setProjectInfo(data.project || null);
         });
-    }, [lavidaplusProjectId]);
+    }, [VinhomeProjectId]);
 
     // áp dụng bộ lọc
     useEffect(() => {
@@ -222,7 +222,7 @@ export default function LavidaPlusPage() {
                 {/* Nếu có sản phẩm */}
                 {products.length > 0 && (
                     <>
-                        <h1 className="sunrise-title">Lavida </h1>
+                        <h1 className="sunrise-title">Vinhome Cần Giờ </h1>
 
                         <nav
                             style={{
@@ -234,7 +234,7 @@ export default function LavidaPlusPage() {
                             <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
                                 Trang chủ
                             </Link>{" "}
-                            &gt; <span>Lavida Plus</span>
+                            &gt; <span>Vinhome Cần Giờ</span>
 
                         </nav>
 
