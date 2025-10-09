@@ -20,7 +20,7 @@ const Footer = () => {
                     {/* Địa chỉ */}
                     <div className="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 className="text-uppercase mb-4">Địa chỉ</h5>
-                        <p>123 Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh</p>
+                        <p>Sunrise Riverside Block A, đường Nguyễn Hữu Thọ, Nhà Bè, Thành Phố Hồ Chí Minh</p>
                     </div>
 
                     {/* Liên hệ */}
@@ -36,7 +36,7 @@ const Footer = () => {
 
                 <div className="row align-items-center">
                     <div className="col-md-12 col-lg-12 text-center">
-                        <p className="text-muted mb-0">© 2025 Công ty của bạn. All rights reserved.</p>
+                        <p className="text-muted mb-0">© 2025 Solaraland. All rights reserved.</p>
                     </div>
                 </div>
             </div>

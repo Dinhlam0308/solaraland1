@@ -13,6 +13,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     z-index: 0;
 }
 
@@ -125,6 +126,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     filter: brightness(0.75);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -207,6 +209,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -343,8 +346,14 @@
 }
 
 @keyframes modalSlideIn {
-    from {opacity: 0; transform: translateY(-30px);}
-    to {opacity: 1; transform: translateY(0);}
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .quickview-close {
@@ -363,6 +372,7 @@
     justify-content: center;
     transition: all 0.3s ease;
     color: #1a2332;
+    z-index: 10;
 }
 
 .quickview-close:hover {
@@ -371,9 +381,16 @@
     transform: rotate(90deg);
 }
 
-/* Modal Layout */
-.quickview-left {flex: 1; padding: 30px; background: #f8f9fa;}
-.quickview-right {flex: 1; padding: 40px;}
+.quickview-left {
+    flex: 1;
+    padding: 30px;
+    background: #f8f9fa;
+}
+
+.quickview-right {
+    flex: 1;
+    padding: 40px;
+}
 
 .quickview-image-container {
     width: 100%;
@@ -385,6 +402,7 @@
     width: 100%;
     height: 500px;
     object-fit: cover;
+    object-position: center;
     border-radius: 12px;
     cursor: zoom-in;
     box-shadow: 0 8px 24px rgba(26, 35, 50, 0.15);
@@ -402,6 +420,7 @@
     width: 70px;
     height: 70px;
     object-fit: cover;
+    object-position: center;
     cursor: pointer;
     border: 3px solid transparent;
     border-radius: 8px;
@@ -410,6 +429,10 @@
 
 .quickview-thumbs img.active {
     border-color: #c9a961;
+}
+
+.quickview-thumbs img:hover {
+    border-color: rgba(201, 169, 97, 0.5);
 }
 
 /* ===== ZOOM MODAL ===== */
@@ -449,68 +472,460 @@
     align-items: center;
     justify-content: center;
     color: #1a2332;
+    z-index: 10000;
+    transition: all 0.3s ease;
+}
+
+.zoom-close:hover {
+    background: #c9a961;
+    color: #fff;
+    transform: rotate(90deg);
 }
 
 /* ===== RESPONSIVE TABLET ===== */
 @media (max-width: 1024px) {
-    .banner {height: 500px;}
-    .banner-content h1 {font-size: 3rem;}
-    .banner-content p {font-size: 1.2rem;}
-    .du-an-dang-ban {gap: 20px; padding: 0 20px;}
-    .project-card {width: 45%; height: 260px;}
-    .quickview-content {width: 95%; flex-direction: column; overflow-y: auto; max-height: 90vh;}
-    .custom-prev, .custom-next {display: none !important;}
+    .banner {
+        height: 500px;
+    }
+
+    .banner-content h1 {
+        font-size: 3rem;
+    }
+
+    .banner-content p {
+        font-size: 1.2rem;
+    }
+
+    .selection-title h2 {
+        font-size: 2rem;
+        margin: 40px 0 30px;
+    }
+
+    .du-an-dang-ban {
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .project-card {
+        width: calc(50% - 10px);
+        height: 280px;
+    }
+
+    .rent-slider-container {
+        padding: 0 30px;
+        margin: 60px auto;
+    }
+
+    .quickview-content {
+        width: 95%;
+        flex-direction: column;
+        overflow-y: auto;
+        max-height: 90vh;
+    }
+
+    .quickview-left,
+    .quickview-right {
+        padding: 25px;
+    }
+
+    .custom-prev,
+    .custom-next {
+        display: none !important;
+    }
 }
 
 /* ===== RESPONSIVE MOBILE ===== */
+/* Improved mobile responsive styles for consistent image sizing */
 @media (max-width: 768px) {
-    .banner {height: 420px;}
-    .banner-content h1 {font-size: 2.2rem;}
-    .banner-content p {font-size: 1rem;}
-    .du-an-dang-ban {flex-direction: column; padding: 0 15px;}
-    .project-card {width: 100%; max-width: 380px; height: 240px;}
-    .rent-card {width: 95%;}
-    .quickview-content {width: 95%; flex-direction: column; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease;}
-}
+    /* Banner optimization */
+    .banner {
+        height: 420px;
+    }
 
-/* Hiệu ứng trượt QuickView trên mobile */
-@keyframes slideUp {
-    from {transform: translateY(100%); opacity: 0;}
-    to {transform: translateY(0); opacity: 1;}
-}
+    .banner video {
+        object-position: center center;
+    }
 
-/* ===== EXTRA SMALL MOBILE ===== */
-@media (max-width: 480px) {
-    .banner {height: 350px;}
-    .banner-content h1 {font-size: 1.8rem;}
-    .banner-content p {font-size: 0.9rem;}
-    .project-card {max-width: 340px; height: 220px;}
-    .rent-info h3 {font-size: 0.95rem;}
-    .rent-price {font-size: 0.95rem;}
-    .contact-btn {font-size: 0.8rem; padding: 6px 18px;}
-    .quickview-image {height: 250px;}
-}
-/* ===== RESPONSIVE SLIDER (MOBILE FIX) ===== */
-@media (max-width: 768px) {
+    .banner-content {
+        padding: 0 20px;
+        width: 100%;
+    }
+
+    .banner-content h1 {
+        font-size: 2.2rem;
+        margin-bottom: 16px;
+        letter-spacing: 1.5px;
+        line-height: 1.3;
+    }
+
+    .banner-content p {
+        font-size: 1rem;
+        letter-spacing: 0.8px;
+        line-height: 1.5;
+    }
+
+    /* Section titles */
+    .selection-title h2 {
+        font-size: 1.75rem;
+        margin: 40px 0 30px;
+        padding: 0 20px 15px;
+        letter-spacing: 1.2px;
+    }
+
+    .selection-title h2::after {
+        width: 60px;
+        height: 3px;
+    }
+
+    /* Project cards - 1 per row with consistent 300px height */
+    .du-an-dang-ban {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px;
+        gap: 20px;
+        margin: 30px auto;
+    }
+
+    .project-card {
+        width: 100%;
+        max-width: 450px;
+        height: 300px;
+        margin: 0 auto;
+    }
+
+    .project-card img {
+        object-fit: cover;
+        object-position: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    .project-name {
+        font-size: 1.35rem;
+        padding: 16px;
+        letter-spacing: 0.8px;
+    }
+
+    /* Rental cards - 1 per row with consistent 300px height matching project cards */
     .rent-slider-container {
         max-width: 100%;
-        padding: 0 10px;
+        padding: 0 20px;
+        margin: 50px auto;
+    }
+
+    .rent-slider-container .slick-slide {
+        padding: 10px 5px;
     }
 
     .slick-slide {
         display: flex !important;
         justify-content: center;
+        align-items: center;
+    }
+
+    .slide-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     .rent-card {
-        width: 90%;
-        max-width: 360px;
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+
+    /* Set rental image height to 300px to match project cards */
+    .rent-img-wrapper {
+        height: 300px;
+    }
+
+    .rent-img {
+        object-fit: cover;
+        object-position: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    .rent-info {
+        padding: 18px;
+    }
+
+    .rent-info h3 {
+        font-size: 1.1rem;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+
+    .rent-price {
+        font-size: 1.05rem;
+        margin: 8px 0 14px;
+    }
+
+    .contact-btn {
+        font-size: 0.9rem;
+        padding: 10px 22px;
+        width: 100%;
+        max-width: 220px;
+    }
+
+    /* Slider dots */
+    .rent-slider-container .slick-dots {
+        bottom: -35px;
+    }
+
+    .rent-slider-container .slick-dots li button:before {
+        font-size: 10px;
+        color: #c9a961;
+    }
+
+    .rent-slider-container .slick-dots li.slick-active button:before {
+        color: #c9a961;
+        opacity: 1;
+    }
+
+    /* Quickview modal */
+    .quickview-content {
+        width: 95%;
+        max-width: 95%;
+        flex-direction: column;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideUp 0.3s ease;
+        margin: 20px;
+    }
+
+    .quickview-close {
+        top: 12px;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+        z-index: 100;
+    }
+
+    .quickview-left {
+        padding: 20px 15px;
+        background: #ffffff;
+    }
+
+    .quickview-right {
+        padding: 20px 15px;
+    }
+
+    .quickview-image-container {
+        max-width: 100%;
+    }
+
+    .quickview-image {
+        height: 300px;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 10px;
+    }
+
+    .quickview-thumbs {
+        gap: 8px;
+        margin-top: 12px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .quickview-thumbs img {
+        width: 65px;
+        height: 65px;
+        flex-shrink: 0;
+        border-width: 2px;
+    }
+
+    .quickview-right h3 {
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+        line-height: 1.4;
+    }
+
+    .quickview-right p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    /* Zoom modal */
+    .zoom-modal {
+        padding: 10px;
+    }
+
+    .zoomed-image {
+        max-width: 100%;
+        max-height: 90%;
+        border-radius: 6px;
+    }
+
+    .zoom-close {
+        top: 20px;
+        right: 20px;
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
     }
 }
 
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ===== EXTRA SMALL MOBILE ===== */
+/* Optimized for small screens with consistent 260px image heights */
 @media (max-width: 480px) {
+    .banner {
+        height: 350px;
+    }
+
+    .banner-content h1 {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+
+    .banner-content p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .selection-title h2 {
+        font-size: 1.5rem;
+        margin: 30px 0 25px;
+        padding: 0 15px 12px;
+    }
+
+    /* Project cards - 260px height on small screens */
+    .du-an-dang-ban {
+        padding: 0 15px;
+        gap: 18px;
+    }
+
+    .project-card {
+        max-width: 100%;
+        height: 260px;
+    }
+
+    .project-name {
+        font-size: 1.15rem;
+        padding: 14px;
+    }
+
+    /* Rental cards - 260px height matching project cards */
+    .rent-slider-container {
+        padding: 0 15px;
+        margin: 40px auto;
+    }
+
     .rent-card {
-        width: 100%;
-        max-width: 340px;
+        max-width: 100%;
+    }
+
+    .rent-img-wrapper {
+        height: 260px;
+    }
+
+    .rent-info {
+        padding: 16px;
+    }
+
+    .rent-info h3 {
+        font-size: 1rem;
+    }
+
+    .rent-price {
+        font-size: 0.95rem;
+        margin: 6px 0 12px;
+    }
+
+    .contact-btn {
+        font-size: 0.85rem;
+        padding: 9px 18px;
+        max-width: 200px;
+    }
+
+    /* Quickview adjustments */
+    .quickview-content {
+        width: 98%;
+        margin: 10px;
+    }
+
+    .quickview-image {
+        height: 260px;
+    }
+
+    .quickview-thumbs img {
+        width: 58px;
+        height: 58px;
+    }
+
+    .quickview-right h3 {
+        font-size: 1.1rem;
+    }
+
+    .quickview-right .rent-price {
+        font-size: 0.9rem;
+    }
+
+    .quickview-right p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Smooth scrolling for modals on mobile */
+@media (max-width: 768px) {
+    .quickview-content {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    .quickview-thumbs {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .project-card:active {
+        transform: scale(0.98);
+    }
+
+    .rent-card:active {
+        transform: translateY(-5px);
+    }
+
+    .contact-btn:active {
+        transform: scale(0.96);
+    }
+
+    /* Disable hover effects on touch devices */
+    .rent-img-wrapper:hover .rent-overlay {
+        opacity: 0;
+    }
+
+    .project-card:hover img {
+        filter: brightness(0.75);
+        transform: scale(1);
+    }
+
+    .project-card:hover {
+        transform: translateY(0);
+    }
+
+    .rent-card:hover {
+        transform: translateY(0);
     }
 }

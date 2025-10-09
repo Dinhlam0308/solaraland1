@@ -12,7 +12,7 @@ const projects = [
     { slug: "sunrise-riverside", name: "Sunrise Riverside", img: "/images/trangchu_SunriseRiverside.jpg", alt: "Dự án Sunrise Riverside" },
     { slug: "saigon-south", name: "Saigon South", img: "/images/trangchu_SaiGonSouth.jpg", alt: "Dự án Saigon South" },
     { slug: "celesta-rise", name: "Celesta Rise", img: "/images/trangchu_CelestaRise.jpg", alt: "Dự án Celesta Rise" },
-    { slug: "lavida-plus", name: "Lavida Plus", img: "/images/trangchu_Lavidaplus.png", alt: "Dự án Lavida Plus" },
+    { slug: "vinhome", name: "Vinhome Cần Giờ", img: "/images/trangchu_vinhome_can_gio.jpg", alt: "Dự án Vinhome_Can_Gio" },
     { slug: "zeitgeist", name: "Zeitgeist", img: "/images/trangchu_Zeitgeist.png", alt: "Dự án Zeitgeist" },
     { slug: "victoria-village", name: "Victoria Village", img: "/images/trangchu_VictoriaVillage.jpg", alt: "Dự án Victoria Village" },
 ];

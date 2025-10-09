@@ -3,7 +3,7 @@ import ConsignManager from './pages/Consign/ConsignManager.jsx';
 import ContactForm from './pages/Contact/ContactForm.jsx';
 import Home from './pages/Home/Home.jsx';
 import SunriseRiverside from './components/Home/SunriseRiverside.jsx';
-import LavidaPlus from './components/Home/LavidaPlus.jsx';
+import Vinhome from './components/Home/Vinhome.jsx';
 import SaigonSouth from './components/Home/SaigonSouth.jsx';
 import CelestaRise from './components/Home/CelestaRise.jsx';
 import VictoriaVillage from './components/Home/VictoriaVillage.jsx';
@@ -30,7 +30,7 @@ function App() {
                 <Route path="/trang-chu" element={<Home />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/trang-chu/sunrise-riverside" element={<SunriseRiverside />}/>
-                <Route path="/trang-chu/lavida-plus" element={<LavidaPlus />} />
+                <Route path="/trang-chu/vinhome" element={<Vinhome />} />
                 <Route path= "/trang-chu/saigon-south" element={<SaigonSouth />} />
                 <Route path="/trang-chu/celesta-rise"  element={<CelestaRise/>}/>
                 <Route path="/trang-chu/victoria-village" element={<VictoriaVillage />} />
