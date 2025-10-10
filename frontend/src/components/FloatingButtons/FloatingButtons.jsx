@@ -1,7 +1,7 @@
 import React from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
-import "./FloatingButtons.css";
+import "../../assets/css/FloatingButtons.css";
 
 export default function FloatingButtons() {
   return (
