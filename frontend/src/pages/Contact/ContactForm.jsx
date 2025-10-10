@@ -23,9 +23,11 @@ export default function ContactForm({ onSuccess }) {
             visitorId = crypto.randomUUID()
             localStorage.setItem("visitorId", visitorId)
         }
+    
 
         axios
-            .post("http://localhost:3001/api/stats/track-visit", {
+            .post("https://
+                  solaraland.vn/api/stats/track-visit", {
                 page: window.location.pathname,
                 referrer: document.referrer,
                 visitorId,
@@ -38,7 +40,7 @@ export default function ContactForm({ onSuccess }) {
             ...formData,
             [e.target.name]: e.target.value,
         })
-        setErrors((prev) => ({ ...prev, [e.target.name]: "" })) // xóa lỗi khi nhập lại
+        setErrors((prev) => ({ ...prev, [e.target.name]: "" })) // clear error on change
     }
 
     const validateForm = () => {
@@ -141,7 +143,6 @@ export default function ContactForm({ onSuccess }) {
                     {loading ? "Đang gửi..." : "Gửi liên hệ"}
                 </button>
 
-                {/* Thông báo gửi */}
                 {error && <div className="alert-message error">⚠️ {error}</div>}
                 {success && <div className="alert-message success">✅ {success}</div>}
             </form>
