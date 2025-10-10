@@ -5,7 +5,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { getProject, updateProject } from '../../api/project';
 
-// Plugin upload ảnh cho CKEditor (upload ảnh trong nội dung)
+// ✅ Cập nhật upload ảnh cho CKEditor dùng domain thật
 function CustomUploadAdapterPlugin(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => ({
         upload: () =>
@@ -13,7 +13,8 @@ function CustomUploadAdapterPlugin(editor) {
                 const data = new FormData();
                 data.append('upload', file);
 
-                return fetch('http://localhost:3001/api/upload', {
+                // ✅ Đổi URL này sang API domain thật
+                return fetch('https://api.solaraland.vn/api/upload', {
                     method: 'POST',
                     body: data,
                 })
@@ -45,14 +46,11 @@ export default function EditProject() {
 
     const [loading, setLoading] = useState(true);
 
-    // Load dữ liệu project khi mở component
     useEffect(() => {
         async function fetchProject() {
             try {
                 const res = await getProject(id);
-                // Nếu backend trả {success:true,data:project} thì lấy res.data
                 const project = res.data ? res.data : res;
-
                 setForm({
                     name: project.name || '',
                     location: project.location || '',
