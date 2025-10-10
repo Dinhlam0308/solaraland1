@@ -23,7 +23,7 @@ export default function VictoriaVillagePage() {
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 8;
     const navigate = useNavigate();
-    const zaloNumber = "0123456789";
+    const zaloNumber = "0968992882";
 
     useEffect(() => {
         getProjectWithSaleProducts(victoriaProjectId).then((data) => {
