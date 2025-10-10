@@ -11,7 +11,7 @@ export default function ProductDetail() {
     const [product, setProduct] = useState(null)
 
     const [currentIndex, setCurrentIndex] = useState(0)
-    const zaloNumber = "0123456789"
+    const zaloNumber = "0968992882"
 
     useEffect(() => {
         async function fetchData() {
