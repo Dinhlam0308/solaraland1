@@ -16,7 +16,7 @@ import OfficeTelPage from './components/Product/OfficeTelPage.jsx';
 import NewsListPage from './components/News/NewsListPage.jsx';
 import NewsDetailPage from './components/News/NewsDetailPage.jsx';
 import ProductDetails from './components/Product/ProductDetails.jsx';
-
+import FloatingButtons from "./components/FloatingButtons/FloatingButtons";
 
 
 
@@ -43,6 +43,7 @@ function App() {
                 <Route path="/tin-tuc/:slug" element={<NewsDetailPage/>} />
             </Routes>
             <Footer/>
+            <FloatingButtons />
         </Router>
     );
 }
