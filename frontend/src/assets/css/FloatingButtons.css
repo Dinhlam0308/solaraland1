@@ -1,1 +1,44 @@
+.floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+}
+
+.floating-buttons a {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Nút Zalo */
+.btn-zalo {
+  background-color: #0068ff;
+}
+
+/* Nút gọi điện */
+.btn-phone {
+  background-color: #28a745;
+}
+
+/* Hiệu ứng hover */
+.floating-buttons a:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.icon {
+  font-size: 26px;
+}
 
