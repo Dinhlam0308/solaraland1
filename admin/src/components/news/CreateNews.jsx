@@ -4,15 +4,18 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { createNews } from '../../api/news';
 
+// URL backend thật
+const API_URL = 'https://api.solaraland.vn';
+
 // Plugin upload ảnh cho CKEditor
 function CustomUploadAdapterPlugin(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => ({
         upload: () =>
             loader.file.then((file) => {
                 const data = new FormData();
-                data.append('upload', file); // field khớp backend
+                data.append('upload', file); // field phải khớp với backend
 
-                return fetch('http://localhost:3001/api/upload', {
+                return fetch(`${API_URL}/api/upload`, {
                     method: 'POST',
                     body: data,
                 })
@@ -22,7 +25,7 @@ function CustomUploadAdapterPlugin(editor) {
                     })
                     .then((res) => {
                         console.log('Upload ảnh CKEditor:', res);
-                        return { default: res.url };
+                        return { default: res.url }; // đường dẫn ảnh trả về
                     });
             }),
         abort: () => {},
@@ -36,32 +39,37 @@ export default function CreateNews({ onSaved, onCancel }) {
         content: '',
         tags: '',
         keywords: '',
-        thumbnail: '', // chứa URL ảnh sau khi upload
+        thumbnail: '',
     });
 
+    // Xử lý thay đổi input text
     function handleChange(e) {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
     }
 
-    // upload file thumbnail lên server và set URL vào state
+    // Upload ảnh thumbnail
     async function handleThumbnailUpload(e) {
         const file = e.target.files[0];
         if (!file) return;
         const data = new FormData();
         data.append('upload', file);
-        const res = await fetch('http://localhost:3001/api/upload', {
+
+        const res = await fetch(`${API_URL}/api/upload`, {
             method: 'POST',
             body: data,
         });
+
         if (!res.ok) {
             alert('Upload ảnh thất bại');
             return;
         }
+
         const json = await res.json();
-        setForm({ ...form, thumbnail: json.url }); // lưu URL trả về
+        setForm({ ...form, thumbnail: json.url });
     }
 
+    // Gửi dữ liệu lên server
     async function handleSubmit(e) {
         e.preventDefault();
         const payload = {
@@ -69,7 +77,7 @@ export default function CreateNews({ onSaved, onCancel }) {
             tags: form.tags ? form.tags.split(',').map((t) => t.trim()) : [],
             keywords: form.keywords ? form.keywords.split(',').map((k) => k.trim()) : [],
         };
-        await createNews(payload); // gửi JSON với thumbnail là URL
+        await createNews(payload);
         if (onSaved) onSaved();
         navigate('/news');
     }
@@ -143,7 +151,11 @@ export default function CreateNews({ onSaved, onCancel }) {
                         Tạo mới
                     </button>
                     {onCancel && (
-                        <button type="button" className="btn btn-outline-secondary" onClick={onCancel}>
+                        <button
+                            type="button"
+                            className="btn btn-outline-secondary"
+                            onClick={onCancel}
+                        >
                             ← Quay lại danh sách
                         </button>
                     )}
