@@ -217,7 +217,7 @@ export default function NhaPhoPage() {
                                 <div className="info">
                                     <h6 className="mb-1">{product.name}</h6>
                                     <p className="mb-1 small">{Number(product.price).toLocaleString()} đ</p>
-                                    <a href={`https://zalo.me/0123456789`} target="_blank" rel="noopener noreferrer"
+                                    <a href={`https://zalo.me/0968992882`} target="_blank" rel="noopener noreferrer"
                                        className="btn btn-success btn-sm" onClick={(e) => e.stopPropagation()}>
                                         Liên hệ Zalo
                                     </a>
