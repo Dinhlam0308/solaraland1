@@ -1,26 +1,44 @@
-// Đọc file .env trước
+// Đọc file .env (chứa MONGO_URI, PORT,...)
 require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// ==================== MIDDLEWARE ====================
+
+// Cho phép nhận JSON body
 app.use(express.json());
 
-// Nếu bạn còn lưu file ảnh cục bộ trong thư mục uploads thì giữ dòng này,
-// còn đã chuyển upload sang Cloudinary thì có thể bỏ
-app.use('/uploads', express.static('uploads'));
+// Cấu hình CORS cho cả frontend và admin
+app.use(cors({
+  origin: [
+    'https://solaraland.vn',
+    'https://admin.solaraland.vn'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
+// Nếu bạn vẫn còn lưu ảnh cục bộ trong /uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// ==================== DATABASE ====================
 
 // Kết nối MongoDB Atlas
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('✅ MongoDB connected'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
-// Import các routes (đảm bảo các file này có tồn tại trong thư mục routes/)
+// ==================== ROUTES ====================
+
+// Import routes (đảm bảo các file này có trong /routes)
 const projectRoutes = require('./routes/projects');
 const productRoutes = require('./routes/products');
 const newsRoutes = require('./routes/news');
@@ -28,11 +46,8 @@ const consignRoutes = require('./routes/consign');
 const contactRoutes = require('./routes/contact');
 const adminRoutes = require('./routes/admin');
 const statsRoutes = require('./routes/stats');
-// Thêm upload route
 const uploadRoutes = require('./routes/uploads');
 const cloudinaryRoutes = require('./routes/cloudinary');
-
-
 
 // Mount routes
 app.use('/api/projects', projectRoutes);
@@ -42,16 +57,17 @@ app.use('/api/consigns', consignRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/admin', adminRoutes);
 app.use('/api/stats', statsRoutes);
-// mount API upload ảnh lên Cloudinary
 app.use('/api/upload', uploadRoutes);
 app.use('/api/cloudinary', cloudinaryRoutes);
-app.use('/api', require('./routes/stats'));
-// Test route gốc
-app.get('/', (req, res) => {
-    res.send('Solaraland API is running...');
 
+// Test route
+app.get('/', (req, res) => {
+  res.send('✅ Solaraland API is running on https://api.solaraland.vn');
 });
 
-// Khởi động server
+// ==================== SERVER START ====================
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
