@@ -157,7 +157,7 @@ const Home = () => {
                                     <p className="rent-price">{item.price?.toLocaleString()} VND/tháng</p>
                                     <button
                                         className="contact-btn"
-                                        onClick={() => window.open(`https://zalo.me/so-zalo`, "_blank")}
+                                        onClick={() => window.open(`https://zalo.me/0968992882`, "_blank")}
                                     >
                                         Liên hệ
                                     </button>
@@ -202,7 +202,7 @@ const Home = () => {
                             <p>{selectedProduct.description || "Mô tả sản phẩm..."}</p>
                             <button
                                 className="contact-btn"
-                                onClick={() => window.open(`https://zalo.me/so-zalo`, "_blank")}
+                                onClick={() => window.open(`https://zalo.me/0968992882`, "_blank")}
                             >
                                 Liên hệ qua Zalo
                             </button>
