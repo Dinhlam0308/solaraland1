@@ -4,6 +4,9 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { createProject } from '../../api/project';
 
+// 👉 Tự động lấy domain hiện tại hoặc từ file .env (nếu có)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || `${window.location.origin}/api`;
+
 // Plugin upload ảnh cho CKEditor
 function CustomUploadAdapterPlugin(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => ({
@@ -12,7 +15,7 @@ function CustomUploadAdapterPlugin(editor) {
                 const data = new FormData();
                 data.append('upload', file); // field backend nhận
 
-                return fetch('http://localhost:3001/api/upload', {
+                return fetch(`${API_BASE_URL}/upload`, {
                     method: 'POST',
                     body: data,
                 })
@@ -22,7 +25,7 @@ function CustomUploadAdapterPlugin(editor) {
                     })
                     .then((res) => {
                         console.log('Upload ảnh CKEditor:', res);
-                        // Trả về object { default: url } để CKEditor hiển thị ảnh
+                        // CKEditor cần object { default: url } để hiển thị
                         return { default: res.url };
                     });
             }),
@@ -55,9 +58,14 @@ export default function CreateProject({ onSaved, onCancel }) {
                 : [],
         };
 
-        await createProject(payload);
-        if (onSaved) onSaved();
-        navigate('/projects'); // chuyển về list project
+        try {
+            await createProject(payload);
+            if (onSaved) onSaved();
+            navigate('/projects');
+        } catch (error) {
+            console.error('Lỗi khi tạo dự án:', error);
+            alert('Tạo dự án thất bại');
+        }
     }
 
     return (
