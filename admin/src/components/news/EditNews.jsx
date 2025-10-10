@@ -4,6 +4,9 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { getNewsById, updateNews } from '../../api/news';
 
+// 👉 Tự động nhận domain backend (không cần localhost)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || `${window.location.origin}/api`;
+
 // Plugin upload ảnh CKEditor
 function CustomUploadAdapterPlugin(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => ({
@@ -12,7 +15,7 @@ function CustomUploadAdapterPlugin(editor) {
                 const data = new FormData();
                 data.append('upload', file);
 
-                return fetch('http://localhost:3001/api/upload', {
+                return fetch(`${API_BASE_URL}/upload`, {
                     method: 'POST',
                     body: data,
                 })
@@ -31,7 +34,7 @@ function CustomUploadAdapterPlugin(editor) {
 
 export default function EditNews({ onSaved, onCancel }) {
     const navigate = useNavigate();
-    const { id } = useParams(); // nếu dùng react-router lấy id từ URL
+    const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState({
         title: '',
@@ -47,11 +50,11 @@ export default function EditNews({ onSaved, onCancel }) {
             try {
                 const news = await getNewsById(id);
                 setForm({
-                    title: news.title,
-                    content: news.content,
-                    tags: news.tags.join(', '),
-                    keywords: news.keywords.join(', '),
-                    thumbnail: news.thumbnail,
+                    title: news.title || '',
+                    content: news.content || '',
+                    tags: news.tags?.join(', ') || '',
+                    keywords: news.keywords?.join(', ') || '',
+                    thumbnail: news.thumbnail || '',
                 });
             } catch (err) {
                 console.error(err);
@@ -68,21 +71,25 @@ export default function EditNews({ onSaved, onCancel }) {
         setForm({ ...form, [name]: value });
     }
 
+    // Upload thumbnail
     async function handleThumbnailUpload(e) {
         const file = e.target.files[0];
         if (!file) return;
         const data = new FormData();
         data.append('upload', file);
-        const res = await fetch('http://localhost:3001/api/upload', {
-            method: 'POST',
-            body: data,
-        });
-        if (!res.ok) {
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/upload`, {
+                method: 'POST',
+                body: data,
+            });
+            if (!res.ok) throw new Error('Upload ảnh thất bại');
+            const json = await res.json();
+            setForm({ ...form, thumbnail: json.url });
+        } catch (error) {
+            console.error(error);
             alert('Upload ảnh thất bại');
-            return;
         }
-        const json = await res.json();
-        setForm({ ...form, thumbnail: json.url });
     }
 
     async function handleSubmit(e) {
@@ -92,7 +99,7 @@ export default function EditNews({ onSaved, onCancel }) {
             tags: form.tags ? form.tags.split(',').map((t) => t.trim()) : [],
             keywords: form.keywords ? form.keywords.split(',').map((k) => k.trim()) : [],
         };
-        await updateNews(id, payload); // gọi API update
+        await updateNews(id, payload);
         if (onSaved) onSaved();
         navigate('/news');
     }
@@ -166,7 +173,11 @@ export default function EditNews({ onSaved, onCancel }) {
                         Cập nhật
                     </button>
                     {onCancel && (
-                        <button type="button" className="btn btn-outline-secondary" onClick={onCancel}>
+                        <button
+                            type="button"
+                            className="btn btn-outline-secondary"
+                            onClick={onCancel}
+                        >
                             ← Quay lại danh sách
                         </button>
                     )}
