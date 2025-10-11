@@ -25,13 +25,12 @@ export default function ContactForm({ onSuccess }) {
         }
     
 
-        axios
-            .post("https://
-                  solaraland.vn/api/stats/track-visit", {
-                page: window.location.pathname,
-                referrer: document.referrer,
-                visitorId,
-            })
+    axios.post("https://api.solaraland.vn/api/stats/track-visit", {
+    page: window.location.pathname,
+    referrer: document.referrer,
+    visitorId,
+}); .catch((err) => console.error("Error tracking visit", err))
+
             .catch((err) => console.error("Error tracking visit", err))
     }, [])
 
