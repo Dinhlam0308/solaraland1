@@ -213,8 +213,14 @@ exports.advancedFilterProducts = async (req, res) => {
             query.bedrooms = { $in: bedrooms.split(',').map(Number) };
         }
 
+        // ✅ FIX CHỖ NÀY — HỖ TRỢ NHIỀU PROJECT ID
         if (projectId) {
-            query.project = projectId; // 👈 lọc theo dự án
+            const projectIds = Array.isArray(projectId) 
+                ? projectId                                  // dạng projectId[]=ID1&projectId[]=ID2
+                : projectId.split(',');                      // dạng projectId=ID1,ID2
+
+            query.project = { $in: projectIds }; // SỬA Ở ĐÂY ✅
+            console.log("Filtering by multiple projects:", projectIds);
         }
 
         if (priceMin || priceMax) {
@@ -226,9 +232,11 @@ exports.advancedFilterProducts = async (req, res) => {
         const products = await Product.find(query).populate('project');
         res.json(products);
     } catch (err) {
+        console.error("🚨 Backend Filter Error:", err);
         res.status(500).json({ error: err.message });
     }
 };
+
 
 exports.getProductByName = async (req, res) => {
     try {
