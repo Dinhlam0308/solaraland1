@@ -24,34 +24,34 @@ const ConsignManager = () => {
     const [uploading, setUploading] = useState(false);
     const navigate = useNavigate();
 
-    // ✅ Tracking visitor với domain thật
+    // ✅ Tracking Visitor
     useEffect(() => {
         let visitorId = localStorage.getItem("visitorId");
         if (!visitorId) {
-            visitorId = crypto.randomUUID();
+            visitorId = window.crypto?.randomUUID?.() || Math.random().toString(36).substring(2);
             localStorage.setItem("visitorId", visitorId);
         }
-        axios
-            .post("https://api.solaraland.vn/api/stats/track-visit", {
-                page: window.location.pathname,
-                referrer: document.referrer,
-                visitorId,
-            })
-            .catch((err) => console.error("Error tracking visit", err));
+
+        axios.post("https://api.solaraland.vn/api/stats/track-visit", {
+            page: window.location.pathname,
+            referrer: document.referrer,
+            visitorId,
+        }).catch((err) => console.error("Error tracking visit", err));
     }, []);
 
-    // Input change handler
+    // ✅ Handle Input Change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
         setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
+    // ✅ Validate Form
     const validateForm = () => {
         const newErrors = {};
         if (!formData.name.trim()) newErrors.name = "Vui lòng nhập tên của bạn";
         if (!formData.phone.trim()) newErrors.phone = "Vui lòng nhập số điện thoại";
-        else if (!/^(0\d{9,10})$/.test(formData.phone))
+        if (!/^(0\d{9,10})$/.test(formData.phone))
             newErrors.phone = "Số điện thoại không hợp lệ";
         if (!formData.apartmentType)
             newErrors.apartmentType = "Vui lòng chọn loại bất động sản";
@@ -62,7 +62,7 @@ const ConsignManager = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    // ✅ Upload ảnh dùng API thật
+    // ✅ UPLOAD ẢNH VỚI API THẬT
     // ✅ Upload ảnh có preview + xóa ảnh
 const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -118,22 +118,22 @@ const handleRemoveImage = (url) => {
     }));
 };
 
-
+    // ✅ Submit Form
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
         if (uploading) {
-            alert("Vui lòng đợi upload ảnh xong trước khi ký gửi");
+            alert("Vui lòng đợi upload ảnh xong rồi gửi");
             return;
         }
         try {
             setLoading(true);
             await createConsign(formData);
-            alert("Thêm consign thành công!");
+            alert("Gửi ký gửi thành công!");
             navigate("/");
         } catch (err) {
             console.error("Error creating consign", err);
-            alert("Có lỗi xảy ra khi thêm consign");
+            alert("Có lỗi xảy ra khi gửi consign");
         } finally {
             setLoading(false);
         }
@@ -142,9 +142,78 @@ const handleRemoveImage = (url) => {
     return (
         <div className="form-container">
             <h2 className="form-title">Thêm Consign mới</h2>
-
             <form onSubmit={handleSubmit} noValidate>
-                {/* Form fields giữ nguyên */}
+
+                {/* ======= FORM FIELD GIỮ NGUYÊN TẤT CẢ ======= */}
+                {/* ✅ Tên */}
+                <div className="mb-3">
+                    <label className="form-label">Tên *</label>
+                    <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} />
+                </div>
+
+                {/* ✅ Số điện thoại & Email */}
+                <div className="row">
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label">Điện thoại *</label>
+                        <input type="text" name="phone" className="form-control" value={formData.phone} onChange={handleChange} />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label">Email</label>
+                        <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} />
+                    </div>
+                </div>
+
+                {/* ✅ Dự án & loại */}
+                <div className="row">
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label">Dự án</label>
+                        <input type="text" name="project" className="form-control" value={formData.project} onChange={handleChange} />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label">Loại BĐS *</label>
+                        <select name="apartmentType" className="form-select" value={formData.apartmentType} onChange={handleChange}>
+                            <option value="">-- Chọn loại --</option>
+                            <option value="can-ho">Căn hộ</option>
+                            <option value="nha-dat">Nhà đất</option>
+                            <option value="dat-nen">Đất nền</option>
+                            <option value="office-tel">Office-tel</option>
+                            <option value="nha-pho">Nhà phố</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* ✅ Giá mong đợi + phòng ngủ */}
+                <div className="row">
+                    <div className="col-md-4 mb-3">
+                        <label className="form-label">Số phòng ngủ</label>
+                        <input type="number" name="bedrooms" className="form-control" value={formData.bedrooms} onChange={handleChange} />
+                    </div>
+                    <div className="col-md-4 mb-3">
+                        <label className="form-label">Giá mong đợi *</label>
+                        <input type="number" name="expectedPrice" className="form-control" value={formData.expectedPrice} onChange={handleChange} />
+                    </div>
+                    <div className="col-md-4 mb-3">
+                        <label className="form-label">Hình thức</label>
+                        <select name="status" className="form-select" value={formData.status} onChange={handleChange}>
+                            <option value="sale">Bán</option>
+                            <option value="rent">Cho thuê</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* ✅ Upload ảnh */}
+                <div className="mb-3">
+                    <label className="form-label">Tải tối đa 5 ảnh</label>
+                    <input type="file" className="form-control" multiple onChange={handleFileUpload} />
+                    {uploading && <div>Đang upload ảnh...</div>}
+                </div>
+
+                {/* ✅ Submit */}
+                <div className="text-center mt-4">
+                    <button className="btn btn-primary" disabled={loading || uploading}>
+                        {loading ? "Đang gửi..." : "Ký gửi ngay"}
+                    </button>
+                </div>
             </form>
         </div>
     );
