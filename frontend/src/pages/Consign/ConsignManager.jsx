@@ -63,51 +63,61 @@ const ConsignManager = () => {
     };
 
     // ✅ Upload ảnh dùng API thật
-    const handleFileUpload = async (e) => {
-        const files = Array.from(e.target.files);
-        if (!files.length) return;
+    // ✅ Upload ảnh có preview + xóa ảnh
+const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
 
-        if (formData.images.length + files.length > 5) {
-            alert(`Bạn chỉ được upload tối đa 5 ảnh.`);
-            return;
-        }
+    // ✅ Kiểm tra không vượt quá 5 ảnh
+    if (formData.images.length + files.length > 5) {
+        alert(`Bạn chỉ được upload tối đa 5 ảnh.`);
+        return;
+    }
 
-        try {
-            setUploading(true);
-            const sigRes = await axios.get("https://api.solaraland.vn/api/cloudinary/signature");
-            const { timestamp, signature, apiKey, cloudName, folder } = sigRes.data;
+    try {
+        setUploading(true);
 
-            const uploadPromises = files.map((file) => {
-                const fd = new FormData();
-                fd.append("file", file);
-                fd.append("api_key", apiKey);
-                fd.append("timestamp", timestamp);
-                fd.append("signature", signature);
-                fd.append("folder", folder);
-                return axios.post(
-                    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-                    fd,
-                    { headers: { "Content-Type": "multipart/form-data" } }
-                );
-            });
+        // Lấy chữ ký Cloudinary từ API thật
+        const sigRes = await axios.get("https://api.solaraland.vn/api/cloudinary/signature");
+        const { timestamp, signature, apiKey, cloudName, folder } = sigRes.data;
 
-            const results = await Promise.all(uploadPromises);
-            const urls = results.map((r) => r.data.secure_url);
-            setFormData((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
-        } catch (err) {
-            console.error("Error uploading file", err);
-            alert("Upload ảnh thất bại");
-        } finally {
-            setUploading(false);
-        }
-    };
+        // ✅ Upload từng ảnh lên Cloudinary
+        const uploadPromises = files.map((file) => {
+            const fd = new FormData();
+            fd.append("file", file);
+            fd.append("api_key", apiKey);
+            fd.append("timestamp", timestamp);
+            fd.append("signature", signature);
+            fd.append("folder", folder);
+            return axios.post(
+                `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+                fd,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            );
+        });
 
-    const handleRemoveImage = (url) => {
-        setFormData((prev) => ({
-            ...prev,
-            images: prev.images.filter((img) => img !== url),
-        }));
-    };
+        // ✅ Lấy URL ảnh trả về
+        const results = await Promise.all(uploadPromises);
+        const urls = results.map((r) => r.data.secure_url);
+
+        // ✅ Cập nhật ảnh vào formData (tích lũy - không ghi đè)
+        setFormData((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
+    } catch (err) {
+        console.error("Error uploading file", err);
+        alert("Upload ảnh thất bại");
+    } finally {
+        setUploading(false);
+    }
+};
+
+// ✅ Hàm xoá ảnh
+const handleRemoveImage = (url) => {
+    setFormData((prev) => ({
+        ...prev,
+        images: prev.images.filter((img) => img !== url),
+    }));
+};
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
