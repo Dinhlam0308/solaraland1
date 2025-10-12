@@ -207,6 +207,40 @@ const handleRemoveImage = (url) => {
                     <input type="file" className="form-control" multiple onChange={handleFileUpload} />
                     {uploading && <div>Đang upload ảnh...</div>}
                 </div>
+                {/* ✅ Danh sách ảnh đã upload với nút X để xóa */}
+{formData.images.length > 0 && (
+    <div className="uploaded-images mt-3" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+        {formData.images.map((url, index) => (
+            <div key={index} style={{ position: "relative", width: "100px", height: "100px" }}>
+                <img
+                    src={url}
+                    alt="uploaded"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "6px" }}
+                />
+                <button
+                    type="button"
+                    onClick={() => handleRemoveImage(url)}
+                    style={{
+                        position: "absolute",
+                        top: "-6px",
+                        right: "-6px",
+                        background: "red",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "50%",
+                        width: "22px",
+                        height: "22px",
+                        fontSize: "12px",
+                        cursor: "pointer"
+                    }}
+                >
+                    ✕
+                </button>
+            </div>
+        ))}
+    </div>
+)}
+
 
                 {/* ✅ Submit */}
                 <div className="text-center mt-4">
